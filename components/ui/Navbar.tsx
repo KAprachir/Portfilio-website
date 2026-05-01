@@ -1,0 +1,134 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import Link from "next/link";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+const navLinks = [
+  { name: "Home", href: "#home" },
+  { name: "About", href: "#about" },
+  { name: "Skills", href: "#skills" },
+  { name: "Projects", href: "#projects" },
+  { name: "Qualifications", href: "#qualifications" },
+  { name: "Contact", href: "#contact" },
+];
+
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+      
+      const sections = navLinks.map(link => link.href.substring(1));
+      const current = sections.find(section => {
+        const el = document.getElementById(section);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          return rect.top <= 100 && rect.bottom >= 100;
+        }
+        return false;
+      });
+      if (current) setActiveSection(current);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <motion.nav
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className={cn(
+        "fixed top-0 left-0 w-full z-50 transition-all duration-300",
+        scrolled ? "py-4 glass border-b border-white/10" : "py-8 bg-transparent"
+      )}
+    >
+      <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
+        <Link href="#home" className="text-2xl font-bold font-mono text-accent-cyan">
+          &lt;Prachir /&gt;
+        </Link>
+
+        {/* Desktop Links */}
+        <div className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-accent-cyan relative py-1",
+                activeSection === link.href.substring(1) ? "text-accent-cyan" : "text-text-muted"
+              )}
+            >
+              {link.name}
+              {activeSection === link.href.substring(1) && (
+                <motion.div
+                  layoutId="activeUnderline"
+                  className="absolute bottom-0 left-0 w-full h-[1px] bg-accent-cyan"
+                />
+              )}
+            </Link>
+          ))}
+        </div>
+
+        {/* Mobile Toggle */}
+        <button
+          className="md:hidden text-text-primary p-2"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? <X /> : <Menu />}
+        </button>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 bg-bg-primary z-[60] flex flex-col items-center justify-center gap-8 md:hidden"
+          >
+            <button
+              className="absolute top-8 right-6 text-text-primary p-2"
+              onClick={() => setIsOpen(false)}
+            >
+              <X size={32} />
+            </button>
+            {navLinks.map((link, i) => (
+              <motion.div
+                key={link.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <Link
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className={cn(
+                    "text-3xl font-bold font-mono transition-colors",
+                    activeSection === link.href.substring(1) ? "text-accent-cyan" : "text-text-muted"
+                  )}
+                >
+                  {link.name}
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
+  );
+}
