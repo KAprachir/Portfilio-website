@@ -17,7 +17,7 @@ export default function Footer() {
           <Link href="https://github.com/KAprachir" target="_blank" className="hover:text-accent-cyan transition-colors">
             <FaGithub size={24} />
           </Link>
-          <Link href="https://linkedin.com" target="_blank" className="hover:text-accent-cyan transition-colors">
+          <Link href="https://www.linkedin.com/in/khairul-alam-prachir/" target="_blank" className="hover:text-accent-cyan transition-colors">
             <FaLinkedin size={24} />
           </Link>
         </div>

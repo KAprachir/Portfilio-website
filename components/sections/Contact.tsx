@@ -1,10 +1,65 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Send } from "lucide-react";
+import { Mail, Send, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(null);
+  const [statusMessage, setStatusMessage] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      setSubmitStatus("error");
+      setStatusMessage("Please fill in all fields.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+    setStatusMessage("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus("success");
+        setStatusMessage(data.message || "Thank you! Your message has been sent successfully.");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        setSubmitStatus("error");
+        setStatusMessage(data.error || "Something went wrong. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Contact form submission error:", error);
+      setSubmitStatus("error");
+      setStatusMessage("Failed to connect to the mail server. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section id="contact" className="py-32">
       <div className="max-w-6xl mx-auto px-6">
@@ -33,7 +88,7 @@ export default function Contact() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/khairul-alam-prachir/"
                 target="_blank"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -76,41 +131,87 @@ export default function Contact() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             className="space-y-6"
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={handleSubmit}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-sm font-mono text-text-muted">Name</label>
                 <input 
                   type="text" 
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   placeholder="John Doe"
-                  className="w-full bg-transparent border-b border-border py-3 px-1 focus:outline-none focus:border-accent-cyan transition-colors"
+                  required
+                  disabled={isSubmitting}
+                  className="w-full bg-transparent border-b border-border py-3 px-1 focus:outline-none focus:border-accent-cyan transition-colors disabled:opacity-50"
                 />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-mono text-text-muted">Email</label>
                 <input 
                   type="email" 
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   placeholder="john@example.com"
-                  className="w-full bg-transparent border-b border-border py-3 px-1 focus:outline-none focus:border-accent-cyan transition-colors"
+                  required
+                  disabled={isSubmitting}
+                  className="w-full bg-transparent border-b border-border py-3 px-1 focus:outline-none focus:border-accent-cyan transition-colors disabled:opacity-50"
                 />
               </div>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-mono text-text-muted">Message</label>
               <textarea 
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
                 rows={4} 
                 placeholder="How can I help you?"
-                className="w-full bg-transparent border-b border-border py-3 px-1 focus:outline-none focus:border-accent-cyan transition-colors resize-none"
+                required
+                disabled={isSubmitting}
+                className="w-full bg-transparent border-b border-border py-3 px-1 focus:outline-none focus:border-accent-cyan transition-colors resize-none disabled:opacity-50"
               />
             </div>
+            
+            {submitStatus && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`p-4 rounded-lg flex items-start gap-3 border text-sm ${
+                  submitStatus === "success"
+                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+                    : "bg-rose-500/10 border-rose-500/30 text-rose-400"
+                }`}
+              >
+                {submitStatus === "success" ? (
+                  <CheckCircle2 size={18} className="mt-0.5 shrink-0" />
+                ) : (
+                  <AlertCircle size={18} className="mt-0.5 shrink-0" />
+                )}
+                <span>{statusMessage}</span>
+              </motion.div>
+            )}
+
             <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full py-4 bg-accent-cyan text-bg-primary font-bold rounded-lg flex items-center justify-center gap-2 group"
+              type="submit"
+              disabled={isSubmitting}
+              whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+              whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+              className="w-full py-4 bg-accent-cyan text-bg-primary font-bold rounded-lg flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Send Message
-              <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              {isSubmitting ? (
+                <>
+                  Sending Message...
+                  <Loader2 size={18} className="animate-spin" />
+                </>
+              ) : (
+                <>
+                  Send Message
+                  <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                </>
+              )}
             </motion.button>
           </motion.form>
         </div>
