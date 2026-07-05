@@ -308,6 +308,10 @@ app.delete('/api/projects/:id', authenticateJWT, async (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
-  console.log(`Express server running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Express server running on port ${PORT}`);
+  });
+}
+
+module.exports = app;
