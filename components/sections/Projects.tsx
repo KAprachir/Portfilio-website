@@ -68,49 +68,14 @@ export default function Projects() {
               whileHover={{ y: -10 }}
               className="group bg-bg-surface border border-border rounded-xl overflow-hidden relative flex flex-col h-full"
             >
-              <div className="aspect-video w-full overflow-hidden relative">
+              <div className="aspect-video w-full overflow-hidden relative border-b border-border/40">
                 <img 
                   src={project.image} 
                   alt={project.title} 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                
-                {/* Hover overlay with links */}
-                <div className="absolute inset-0 bg-bg-primary/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-4 p-4 text-center">
-                  <p className="font-mono text-xs text-accent-cyan uppercase tracking-widest mb-2">Project Links</p>
-                  <div className="flex flex-col gap-3 w-full max-w-[200px]">
-                    {project.live && (
-                      <Link 
-                        href={project.live} 
-                        target="_blank" 
-                        className="px-4 py-2.5 bg-accent-cyan text-bg-primary font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-[0_0_15px_rgba(0,212,255,0.3)]"
-                      >
-                        <FaExternalLinkAlt size={12} />
-                        Live Demo
-                      </Link>
-                    )}
-                    {project.githubClient && (
-                      <Link 
-                        href={project.githubClient} 
-                        target="_blank" 
-                        className="px-4 py-2.5 bg-white/10 text-text-primary font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:bg-white/20 transition-all border border-white/10"
-                      >
-                        <FaGithub size={14} />
-                        Client Code
-                      </Link>
-                    )}
-                    {project.githubServer && (
-                      <Link 
-                        href={project.githubServer} 
-                        target="_blank" 
-                        className="px-4 py-2.5 bg-white/10 text-text-primary font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:bg-white/20 transition-all border border-white/10"
-                      >
-                        <FaGithub size={14} />
-                        Server Code
-                      </Link>
-                    )}
-                  </div>
-                </div>
+                {/* Subtle dark overlay to blend white-bg screenshots into the dark theme */}
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
               </div>
               
               <div className="p-6 flex-1 flex flex-col justify-between">
@@ -130,12 +95,49 @@ export default function Projects() {
                   </ul>
                 </div>
                 
-                <div className="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-border/40">
-                  {project.stack.map(tech => (
-                    <span key={tech} className="text-[10px] uppercase tracking-wider font-mono px-2 py-0.5 bg-border/50 text-text-primary rounded border border-white/5">
-                      {tech}
-                    </span>
-                  ))}
+                <div>
+                  {/* Tech stack */}
+                  <div className="flex flex-wrap gap-1.5 pt-4 border-t border-border/40">
+                    {project.stack.map(tech => (
+                      <span key={tech} className="text-[10px] uppercase tracking-wider font-mono px-2 py-0.5 bg-border/50 text-text-primary rounded border border-white/5">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Dynamic Action Buttons */}
+                  <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-border/40">
+                    {project.live && (
+                      <Link 
+                        href={project.live} 
+                        target="_blank" 
+                        className="flex-1 min-w-[80px] px-2 py-2 bg-accent-cyan text-bg-primary font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-[0_0_12px_rgba(0,212,255,0.2)]"
+                      >
+                        <FaExternalLinkAlt size={10} />
+                        Live
+                      </Link>
+                    )}
+                    {project.githubClient && (
+                      <Link 
+                        href={project.githubClient} 
+                        target="_blank" 
+                        className="flex-1 min-w-[80px] px-2 py-2 bg-white/5 text-text-primary hover:text-accent-cyan font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:bg-white/10 transition-all border border-white/10"
+                      >
+                        <FaGithub size={12} />
+                        Client
+                      </Link>
+                    )}
+                    {project.githubServer && (
+                      <Link 
+                        href={project.githubServer} 
+                        target="_blank" 
+                        className="flex-1 min-w-[80px] px-2 py-2 bg-white/5 text-text-primary hover:text-accent-cyan font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:bg-white/10 transition-all border border-white/10"
+                      >
+                        <FaGithub size={12} />
+                        Server
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
               
