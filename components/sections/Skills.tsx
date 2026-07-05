@@ -6,7 +6,7 @@ import * as FaIcons from "react-icons/fa";
 import * as SiIcons from "react-icons/si";
 import * as VscIcons from "react-icons/vsc";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://server-nu-bice.vercel.app";
 
 const getIconComponent = (iconName: string) => {
   if (iconName.startsWith("Fa")) return (FaIcons as any)[iconName];

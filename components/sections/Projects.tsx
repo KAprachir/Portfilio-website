@@ -7,7 +7,7 @@ import { Info } from "lucide-react";
 import Link from "next/link";
 import ProjectModal from "@/components/ui/ProjectModal";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://server-nu-bice.vercel.app";
 
 const fallbackProjects = [
   {

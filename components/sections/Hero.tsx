@@ -6,7 +6,7 @@ import useGsap from "@/hooks/useGsap";
 import gsap from "gsap";
 import { MoveRight, Download } from "lucide-react";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://server-nu-bice.vercel.app";
 
 const CharacterReveal = ({ text }: { text: string }) => {
   const characters = text.split("");

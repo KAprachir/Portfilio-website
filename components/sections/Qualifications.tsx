@@ -6,7 +6,7 @@ import { Award, ChevronDown, ChevronUp, Calendar } from "lucide-react";
 import useGsap from "@/hooks/useGsap";
 import gsap from "gsap";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://server-nu-bice.vercel.app";
 
 interface QualificationItem {
   _id: string;

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { LogOut, Plus, Trash, Edit, Save, PlusCircle, Briefcase, Code, User, Loader2, CheckCircle2, AlertCircle, Mail, BookOpen, Award, Check } from "lucide-react";
 import Link from "next/link";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://server-nu-bice.vercel.app";
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

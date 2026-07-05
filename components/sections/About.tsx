@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import useGsap from "@/hooks/useGsap";
 import gsap from "gsap";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://server-nu-bice.vercel.app";
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);

@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
     await transporter.sendMail(mailOptions);
 
     // 5. Store message in database (MongoDB Atlas)
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://server-nu-bice.vercel.app";
     try {
       await fetch(`${API_BASE_URL}/api/messages`, {
         method: "POST",
