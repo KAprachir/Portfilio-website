@@ -64,7 +64,17 @@ async function seedDatabase() {
         title: "Prachir",
         typingTexts: ["MIS Student", "Web Developer", "Future Technical Product Manager"],
         subtitle: "Crafting precise digital experiences through code and product strategy. Bridging the gap between technical complexity and user-centric design.",
-        resumeUrl: "/Khairul_Alam_Prachir_CV_ATS.pdf"
+        resumeUrl: "/Khairul_Alam_Prachir_CV_ATS.pdf",
+        aboutTitle: "Building the Future",
+        aboutBio: [
+          "I'm a final-year BBA student majoring in MIS at Begum Rokeya University, Rangpur, Bangladesh.",
+          "My journey started with a fascination for how software can solve business problems. Today, I build web applications and think deeply about product strategy.",
+          "I'm passionate about the intersection of business and technology. My goal is to evolve from a developer into a Technical Product Manager."
+        ],
+        aboutWhoami: "Prachir — MIS Student + Dev",
+        aboutLocation: "Rangpur, Bangladesh 🇧🇩",
+        aboutStatus: "Open to intern/junior dev roles",
+        aboutGoal: "Full Stack Dev → TPM"
       });
       console.log("Default Hero data seeded.");
     }
@@ -224,16 +234,22 @@ app.post('/api/auth/login', async (req, res) => {
 // Update Hero
 app.put('/api/hero', authenticateJWT, async (req, res) => {
   try {
-    const { title, typingTexts, subtitle, resumeUrl } = req.body;
+    const { title, typingTexts, subtitle, resumeUrl, aboutTitle, aboutBio, aboutWhoami, aboutLocation, aboutStatus, aboutGoal } = req.body;
     let hero = await Hero.findOne();
     if (hero) {
       hero.title = title || hero.title;
       hero.typingTexts = typingTexts || hero.typingTexts;
       hero.subtitle = subtitle || hero.subtitle;
       hero.resumeUrl = resumeUrl !== undefined ? resumeUrl : hero.resumeUrl;
+      hero.aboutTitle = aboutTitle !== undefined ? aboutTitle : hero.aboutTitle;
+      hero.aboutBio = aboutBio !== undefined ? aboutBio : hero.aboutBio;
+      hero.aboutWhoami = aboutWhoami !== undefined ? aboutWhoami : hero.aboutWhoami;
+      hero.aboutLocation = aboutLocation !== undefined ? aboutLocation : hero.aboutLocation;
+      hero.aboutStatus = aboutStatus !== undefined ? aboutStatus : hero.aboutStatus;
+      hero.aboutGoal = aboutGoal !== undefined ? aboutGoal : hero.aboutGoal;
       await hero.save();
     } else {
-      hero = await Hero.create({ title, typingTexts, subtitle, resumeUrl });
+      hero = await Hero.create({ title, typingTexts, subtitle, resumeUrl, aboutTitle, aboutBio, aboutWhoami, aboutLocation, aboutStatus, aboutGoal });
     }
     res.json(hero);
   } catch (error) {

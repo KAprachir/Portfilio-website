@@ -1,14 +1,56 @@
 "use client";
 
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { useRef } from "react";
 import useGsap from "@/hooks/useGsap";
 import gsap from "gsap";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
   const leftColRef = useRef<HTMLDivElement>(null);
   const rightColRef = useRef<HTMLDivElement>(null);
+
+  const [aboutData, setAboutData] = useState({
+    aboutTitle: "Building the Future",
+    aboutBio: [
+      "I'm a final-year BBA student majoring in MIS at Begum Rokeya University, Rangpur, Bangladesh.",
+      "My journey started with a fascination for how software can solve business problems. Today, I build web applications and think deeply about product strategy.",
+      "I'm passionate about the intersection of business and technology. My goal is to evolve from a developer into a Technical Product Manager."
+    ],
+    aboutWhoami: "Prachir — MIS Student + Dev",
+    aboutLocation: "Rangpur, Bangladesh 🇧🇩",
+    aboutStatus: "Open to intern/junior dev roles",
+    aboutGoal: "Full Stack Dev → TPM"
+  });
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/hero`)
+      .then(res => {
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
+      .then(data => {
+        if (data) {
+          setAboutData({
+            aboutTitle: data.aboutTitle || "Building the Future",
+            aboutBio: data.aboutBio && data.aboutBio.length > 0 ? data.aboutBio : [
+              "I'm a final-year BBA student majoring in MIS at Begum Rokeya University, Rangpur, Bangladesh.",
+              "My journey started with a fascination for how software can solve business problems. Today, I build web applications and think deeply about product strategy.",
+              "I'm passionate about the intersection of business and technology. My goal is to evolve from a developer into a Technical Product Manager."
+            ],
+            aboutWhoami: data.aboutWhoami || "Prachir — MIS Student + Dev",
+            aboutLocation: data.aboutLocation || "Rangpur, Bangladesh 🇧🇩",
+            aboutStatus: data.aboutStatus || "Open to intern/junior dev roles",
+            aboutGoal: data.aboutGoal || "Full Stack Dev → TPM"
+          });
+        }
+      })
+      .catch(() => {
+        // Fallback already set in state
+      });
+  }, []);
 
   useGsap(() => {
     gsap.from(leftColRef.current, {
@@ -40,20 +82,11 @@ export default function About() {
         {/* Left Column: Bio */}
         <div ref={leftColRef} className="lg:col-span-3">
           <p className="font-mono text-accent-cyan mb-4">// about me</p>
-          <h2 className="text-4xl md:text-5xl font-bold font-mono mb-8">Building the Future</h2>
+          <h2 className="text-4xl md:text-5xl font-bold font-mono mb-8">{aboutData.aboutTitle}</h2>
           <div className="space-y-6 text-lg text-text-muted">
-            <p>
-              I'm a final-year <span className="text-accent-cyan">BBA student majoring in MIS</span> at 
-              Begum Rokeya University, Rangpur, Bangladesh.
-            </p>
-            <p>
-              My journey started with a fascination for how software can solve business problems. 
-              Today, I build <span className="text-accent-cyan">web applications</span> and think deeply about product strategy.
-            </p>
-            <p>
-              I'm passionate about the intersection of business and technology. My goal is to evolve from a 
-              developer into a <span className="text-accent-cyan">Technical Product Manager</span>.
-            </p>
+            {aboutData.aboutBio.map((paragraph, index) => (
+              <p key={index} dangerouslySetInnerHTML={{ __html: paragraph }} />
+            ))}
           </div>
         </div>
 
@@ -71,28 +104,28 @@ export default function About() {
                 <span className="text-accent-cyan">&gt;</span>
                 <div>
                   <p className="text-accent-violet">whoami</p>
-                  <p className="text-text-primary">Prachir — MIS Student + Dev</p>
+                  <p className="text-text-primary">{aboutData.aboutWhoami}</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <span className="text-accent-cyan">&gt;</span>
                 <div>
                   <p className="text-accent-violet">location</p>
-                  <p className="text-text-primary">Rangpur, Bangladesh 🇧🇩</p>
+                  <p className="text-text-primary">{aboutData.aboutLocation}</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <span className="text-accent-cyan">&gt;</span>
                 <div>
                   <p className="text-accent-violet">status</p>
-                  <p className="text-text-primary">Open to intern/junior dev roles</p>
+                  <p className="text-text-primary">{aboutData.aboutStatus}</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <span className="text-accent-cyan">&gt;</span>
                 <div>
                   <p className="text-accent-violet">goal</p>
-                  <p className="text-text-primary">Full Stack Dev → TPM</p>
+                  <p className="text-text-primary">{aboutData.aboutGoal}</p>
                 </div>
               </div>
               <div className="flex gap-3">

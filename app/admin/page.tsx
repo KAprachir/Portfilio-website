@@ -23,9 +23,16 @@ export default function AdminPage() {
     title: "",
     typingTexts: [] as string[],
     subtitle: "",
-    resumeUrl: ""
+    resumeUrl: "",
+    aboutTitle: "",
+    aboutBio: [] as string[],
+    aboutWhoami: "",
+    aboutLocation: "",
+    aboutStatus: "",
+    aboutGoal: ""
   });
   const [typingTextString, setTypingTextString] = useState("");
+  const [aboutBioString, setAboutBioString] = useState("");
   const [isSavingHero, setIsSavingHero] = useState(false);
   const [heroMessage, setHeroMessage] = useState({ type: "" as "success" | "error" | "", text: "" });
 
@@ -71,6 +78,7 @@ export default function AdminPage() {
         if (data) {
           setHeroData(data);
           setTypingTextString(data.typingTexts?.join(", ") || "");
+          setAboutBioString(data.aboutBio?.join("\n") || "");
         }
       }
 
@@ -143,7 +151,8 @@ export default function AdminPage() {
 
     const updatedHero = {
       ...heroData,
-      typingTexts: typingTextString.split(",").map(t => t.trim()).filter(Boolean)
+      typingTexts: typingTextString.split(",").map(t => t.trim()).filter(Boolean),
+      aboutBio: aboutBioString.split("\n").map(b => b.trim()).filter(Boolean)
     };
 
     try {
@@ -545,13 +554,83 @@ export default function AdminPage() {
                   />
                 </div>
 
+                {/* About Me Sub-Section */}
+                <div className="border-t border-border/40 pt-6 mt-6 space-y-4">
+                  <h4 className="text-sm font-mono text-accent-cyan">// About Me Section Settings</h4>
+                  
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-text-muted">About Section Title</label>
+                    <input
+                      type="text"
+                      value={heroData.aboutTitle}
+                      onChange={(e) => setHeroData({ ...heroData, aboutTitle: e.target.value })}
+                      required
+                      className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-text-muted">About Bio Paragraphs (one per line, HTML tags allowed like &lt;span class="text-accent-cyan"&gt;text&lt;/span&gt;)</label>
+                    <textarea
+                      rows={5}
+                      value={aboutBioString}
+                      onChange={(e) => setAboutBioString(e.target.value)}
+                      required
+                      className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors leading-relaxed font-mono text-xs"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-mono text-text-muted">Terminal Profile: Who Am I</label>
+                      <input
+                        type="text"
+                        value={heroData.aboutWhoami}
+                        onChange={(e) => setHeroData({ ...heroData, aboutWhoami: e.target.value })}
+                        required
+                        className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-mono text-text-muted">Terminal Profile: Location</label>
+                      <input
+                        type="text"
+                        value={heroData.aboutLocation}
+                        onChange={(e) => setHeroData({ ...heroData, aboutLocation: e.target.value })}
+                        required
+                        className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-mono text-text-muted">Terminal Profile: Job Status</label>
+                      <input
+                        type="text"
+                        value={heroData.aboutStatus}
+                        onChange={(e) => setHeroData({ ...heroData, aboutStatus: e.target.value })}
+                        required
+                        className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-mono text-text-muted">Terminal Profile: Goal</label>
+                      <input
+                        type="text"
+                        value={heroData.aboutGoal}
+                        onChange={(e) => setHeroData({ ...heroData, aboutGoal: e.target.value })}
+                        required
+                        className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <button
                   type="submit"
                   disabled={isSavingHero}
                   className="px-6 py-3 bg-accent-cyan text-bg-primary font-bold rounded-lg flex items-center gap-2 hover:scale-105 active:scale-0.95 transition-all font-mono text-sm disabled:opacity-50"
                 >
                   {isSavingHero ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                  Save Hero Settings
+                  Save Hero & About Settings
                 </button>
               </form>
             </motion.div>

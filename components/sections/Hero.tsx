@@ -144,9 +144,21 @@ export default function Hero() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          className="font-mono text-accent-cyan text-lg mb-4"
+          className="font-mono text-accent-cyan text-lg mb-4 flex items-center gap-2"
         >
-          👋 Hello World
+          <motion.span
+            animate={{ rotate: [0, 14, -8, 14, -4, 10, 0, 0] }}
+            transition={{
+              duration: 2.5,
+              repeat: Infinity,
+              repeatType: "loop",
+              ease: "easeInOut"
+            }}
+            className="inline-block origin-[70%_70%] text-2xl select-none"
+          >
+            👋
+          </motion.span>
+          <span>Hello World</span>
         </motion.p>
         
         <h1 className="text-6xl md:text-8xl font-bold font-mono mb-6 leading-tight">

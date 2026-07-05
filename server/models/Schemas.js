@@ -5,7 +5,14 @@ const HeroSchema = new mongoose.Schema({
   title: { type: String, required: true },
   typingTexts: [{ type: String }],
   subtitle: { type: String, required: true },
-  resumeUrl: { type: String }
+  resumeUrl: { type: String },
+  // About Me Section
+  aboutTitle: { type: String },
+  aboutBio: [{ type: String }],
+  aboutWhoami: { type: String },
+  aboutLocation: { type: String },
+  aboutStatus: { type: String },
+  aboutGoal: { type: String }
 }, { timestamps: true });
 
 // 2. Skill Schema
