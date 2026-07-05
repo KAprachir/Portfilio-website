@@ -155,7 +155,7 @@ export default function Hero() {
             whileTap={{ scale: 0.95 }}
             className="px-8 py-4 border border-border hover:border-accent-cyan text-text-primary font-bold rounded-lg flex items-center gap-2 transition-all"
           >
-            <a href="/cv.pdf" download className="flex items-center gap-2">
+            <a href="/Khairul_Alam_Prachir_CV_ATS.pdf" download className="flex items-center gap-2">
               Download CV
               <Download size={20} />
             </a>
