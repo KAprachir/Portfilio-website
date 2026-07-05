@@ -6,28 +6,45 @@ import Link from "next/link";
 
 const projects = [
   {
-    title: "Digitools",
-    description: "AI-powered digital toolkit with multiple utilities for developers and creators.",
-    stack: ["React 19", "Vite", "Tailwind v4", "DaisyUI v5"],
-    github: "https://github.com/KAprachir",
-    live: "https://demo.com",
-    image: "https://images.unsplash.com/photo-1618477247222-acbdb0e159b3?auto=format&fit=crop&q=80&w=600",
+    title: "RecipeHub",
+    description: "A full-stack recipe sharing platform where food enthusiasts can create, discover, and manage recipes. Users browse community content, save favorites, and upgrade to premium to unlock unlimited publishing.",
+    features: [
+      "Role-based access (User vs Admin) & recipe moderation",
+      "Stripe-integrated subscriptions for unlimited recipe publishing",
+      "Dynamic MongoDB filtering by category, pagination, and real-time likes/favorites"
+    ],
+    stack: ["Next.js", "Tailwind CSS", "HeroUI", "Framer Motion", "Node.js", "Express.js", "MongoDB", "Better Auth", "Stripe"],
+    githubClient: "https://github.com/KAprachir/recipehub-client",
+    githubServer: "https://github.com/KAprachir/recipehub-server",
+    live: "https://recipehub-client-kappa.vercel.app",
+    image: "https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&q=80&w=600",
   },
   {
-    title: "Keen Keeper",
-    description: "Friend relationship management app to keep track of interactions and important dates.",
-    stack: ["Next.js", "Tailwind", "DaisyUI", "Recharts", "localStorage"],
-    github: "https://github.com/KAprachir",
-    live: "https://demo.com",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=600",
+    title: "HireLoop",
+    description: "A premium career portal designed to bridge the gap between job seekers and employers. Features a custom candidate pipeline, recruiter analytics, and subscription tiers.",
+    features: [
+      "Three roles: Seeker, Recruiter, and Admin, each with unique dashboards",
+      "Custom Applicant Tracking System (ATS) pipeline workflow",
+      "Subscription analytics dashboard and Stripe payment integration"
+    ],
+    stack: ["Next.js", "Tailwind CSS", "HeroUI", "Motion", "Node.js", "Express.js", "MongoDB", "Better Auth", "Stripe"],
+    githubClient: "https://github.com/KAprachir/HireLoop-Client",
+    githubServer: "https://github.com/KAprachir/HireLoop-Server",
+    live: "https://hire-loop-client-eta.vercel.app",
+    image: "https://images.unsplash.com/photo-1521791136368-1a46827d0adb?auto=format&fit=crop&q=80&w=600",
   },
   {
-    title: "English Janala",
-    description: "English learning platform focused on interactive vocabulary and grammar exercises.",
-    stack: ["React", "Tailwind CSS"],
-    github: "https://github.com/KAprachir",
-    live: "https://demo.com",
-    image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=600",
+    title: "IdeaVault",
+    description: "A collaborative platform where entrepreneurs and innovators share, discover, and validate startup ideas through community engagement and peer feedback.",
+    features: [
+      "Nested comment system with full CRUD interactive features",
+      "Stateless JWT authentication and Google OAuth 2.0 login",
+      "Real-time client-side keyword search and instant category filter"
+    ],
+    stack: ["Next.js", "Tailwind CSS", "Node.js", "Express.js", "MongoDB", "JWT", "Bcrypt"],
+    githubClient: "https://github.com/KAprachir/assignment-9-client",
+    live: "https://assignment-9-client-prachir.vercel.app",
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600",
   },
 ];
 
@@ -49,7 +66,7 @@ export default function Projects() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -10 }}
-              className="group bg-bg-surface border border-border rounded-xl overflow-hidden relative"
+              className="group bg-bg-surface border border-border rounded-xl overflow-hidden relative flex flex-col h-full"
             >
               <div className="aspect-video w-full overflow-hidden relative">
                 <img 
@@ -57,24 +74,65 @@ export default function Projects() {
                   alt={project.title} 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-6">
-                  <Link href={project.github} target="_blank" className="p-3 bg-white/10 rounded-full hover:bg-accent-cyan hover:text-bg-primary transition-all">
-                    <FaGithub size={24} />
-                  </Link>
-                  <Link href={project.live} target="_blank" className="p-3 bg-white/10 rounded-full hover:bg-accent-cyan hover:text-bg-primary transition-all">
-                    <FaExternalLinkAlt size={20} />
-                  </Link>
+                
+                {/* Hover overlay with links */}
+                <div className="absolute inset-0 bg-bg-primary/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-4 p-4 text-center">
+                  <p className="font-mono text-xs text-accent-cyan uppercase tracking-widest mb-2">Project Links</p>
+                  <div className="flex flex-col gap-3 w-full max-w-[200px]">
+                    {project.live && (
+                      <Link 
+                        href={project.live} 
+                        target="_blank" 
+                        className="px-4 py-2.5 bg-accent-cyan text-bg-primary font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-[0_0_15px_rgba(0,212,255,0.3)]"
+                      >
+                        <FaExternalLinkAlt size={12} />
+                        Live Demo
+                      </Link>
+                    )}
+                    {project.githubClient && (
+                      <Link 
+                        href={project.githubClient} 
+                        target="_blank" 
+                        className="px-4 py-2.5 bg-white/10 text-text-primary font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:bg-white/20 transition-all border border-white/10"
+                      >
+                        <FaGithub size={14} />
+                        Client Code
+                      </Link>
+                    )}
+                    {project.githubServer && (
+                      <Link 
+                        href={project.githubServer} 
+                        target="_blank" 
+                        className="px-4 py-2.5 bg-white/10 text-text-primary font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:bg-white/20 transition-all border border-white/10"
+                      >
+                        <FaGithub size={14} />
+                        Server Code
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
               
-              <div className="p-6">
-                <h3 className="text-xl font-bold font-mono mb-3 text-accent-cyan">{project.title}</h3>
-                <p className="text-text-muted text-sm mb-6 line-clamp-2">
-                  {project.description}
-                </p>
-                <div className="flex flex-wrap gap-2">
+              <div className="p-6 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-xl font-bold font-mono mb-3 text-accent-cyan">{project.title}</h3>
+                  <p className="text-text-muted text-sm mb-4">
+                    {project.description}
+                  </p>
+                  
+                  <ul className="space-y-2 mb-6 text-xs text-text-muted list-none pl-0">
+                    {project.features.map((feature, fIdx) => (
+                      <li key={fIdx} className="flex items-start gap-2">
+                        <span className="text-accent-cyan mt-0.5 font-mono text-[8px]">■</span>
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div className="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-border/40">
                   {project.stack.map(tech => (
-                    <span key={tech} className="text-[10px] uppercase tracking-wider font-mono px-2 py-1 bg-border/50 text-text-primary rounded border border-white/5">
+                    <span key={tech} className="text-[10px] uppercase tracking-wider font-mono px-2 py-0.5 bg-border/50 text-text-primary rounded border border-white/5">
                       {tech}
                     </span>
                   ))}
