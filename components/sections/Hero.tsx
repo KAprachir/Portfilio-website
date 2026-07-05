@@ -6,11 +6,7 @@ import useGsap from "@/hooks/useGsap";
 import gsap from "gsap";
 import { MoveRight, Download } from "lucide-react";
 
-const typingTexts = [
-  "MIS Student",
-  "Web Developer",
-  "Future Technical Product Manager"
-];
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 const CharacterReveal = ({ text }: { text: string }) => {
   const characters = text.split("");
@@ -37,14 +33,50 @@ const CharacterReveal = ({ text }: { text: string }) => {
 };
 
 export default function Hero() {
+  const [typingTexts, setTypingTexts] = useState<string[]>([
+    "MIS Student",
+    "Web Developer",
+    "Future Technical Product Manager"
+  ]);
+  const [heroData, setHeroData] = useState({
+    title: "Prachir",
+    subtitle: "Crafting precise digital experiences through code and product strategy. Bridging the gap between technical complexity and user-centric design.",
+    resumeUrl: "/Khairul_Alam_Prachir_CV_ATS.pdf"
+  });
+
   const [textIndex, setTextIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
+  // Fetch Hero Configuration
   useEffect(() => {
-    const currentFullText = typingTexts[textIndex];
+    fetch(`${API_BASE_URL}/api/hero`)
+      .then(res => {
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
+      .then(data => {
+        if (data) {
+          setHeroData({
+            title: data.title || "Prachir",
+            subtitle: data.subtitle || "Crafting precise digital experiences through code and product strategy. Bridging the gap between technical complexity and user-centric design.",
+            resumeUrl: data.resumeUrl || "/Khairul_Alam_Prachir_CV_ATS.pdf"
+          });
+          if (data.typingTexts && data.typingTexts.length > 0) {
+            setTypingTexts(data.typingTexts);
+          }
+        }
+      })
+      .catch(() => {
+        // Safe fallback already set in state
+      });
+  }, []);
+
+  useEffect(() => {
+    const currentFullText = typingTexts[textIndex] || "";
+    if (!currentFullText) return;
     const timeout = setTimeout(() => {
       if (!isDeleting) {
         setDisplayText(currentFullText.slice(0, displayText.length + 1));
@@ -61,7 +93,7 @@ export default function Hero() {
     }, isDeleting ? 50 : 100);
 
     return () => clearTimeout(timeout);
-  }, [displayText, isDeleting, textIndex]);
+  }, [displayText, isDeleting, textIndex, typingTexts]);
 
   useGsap(() => {
     gsap.to(contentRef.current, {
@@ -118,7 +150,7 @@ export default function Hero() {
         </motion.p>
         
         <h1 className="text-6xl md:text-8xl font-bold font-mono mb-6 leading-tight">
-          I'm <CharacterReveal text="Prachir" />
+          I'm <CharacterReveal text={heroData.title} />
         </h1>
 
         <div className="h-12 mb-8">
@@ -132,10 +164,9 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="text-text-muted text-lg md:text-xl max-w-2xl mb-12"
+          className="text-text-muted text-lg md:text-xl max-w-2xl mb-12 animate-fade-in"
         >
-          Crafting precise digital experiences through code and product strategy. 
-          Bridging the gap between technical complexity and user-centric design.
+          {heroData.subtitle}
         </motion.p>
 
         <div className="flex flex-wrap gap-6">
@@ -155,7 +186,7 @@ export default function Hero() {
             whileTap={{ scale: 0.95 }}
             className="px-8 py-4 border border-border hover:border-accent-cyan text-text-primary font-bold rounded-lg flex items-center gap-2 transition-all"
           >
-            <a href="/Khairul_Alam_Prachir_CV_ATS.pdf" download className="flex items-center gap-2">
+            <a href={heroData.resumeUrl} download className="flex items-center gap-2">
               Download CV
               <Download size={20} />
             </a>

@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 import { Info } from "lucide-react";
 import Link from "next/link";
 import ProjectModal from "@/components/ui/ProjectModal";
 
-const projects = [
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+const fallbackProjects = [
   {
     title: "RecipeHub",
     description: "A full-stack recipe sharing platform where food enthusiasts can create, discover, and manage recipes. Features role-based access control, premium memberships, and moderation tools.",
@@ -73,7 +75,24 @@ const projects = [
 ];
 
 export default function Projects() {
-  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
+  const [projectList, setProjectList] = useState<any[]>(fallbackProjects);
+  const [selectedProject, setSelectedProject] = useState<any | null>(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/projects`)
+      .then(res => {
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
+      .then(data => {
+        if (data && data.length > 0) {
+          setProjectList(data);
+        }
+      })
+      .catch(() => {
+        // Fallback already set
+      });
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
@@ -93,7 +112,7 @@ export default function Projects() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
+          {projectList.map((project, index) => (
             <motion.div
               key={project.title}
               initial={{ opacity: 0, y: 20 }}
@@ -128,13 +147,13 @@ export default function Projects() {
                   </p>
                   
                   <ul className="space-y-2 mb-6 text-xs text-text-muted list-none pl-0">
-                    {project.features.slice(0, 2).map((feature, fIdx) => (
+                    {project.features && project.features.slice(0, 2).map((feature: string, fIdx: number) => (
                       <li key={fIdx} className="flex items-start gap-2">
                         <span className="text-accent-cyan mt-0.5 font-mono text-[8px]">■</span>
                         <span className="line-clamp-1">{feature}</span>
                       </li>
                     ))}
-                    {project.features.length > 2 && (
+                    {project.features && project.features.length > 2 && (
                       <li className="text-[10px] text-accent-cyan font-mono pl-3">
                         + click to view all features
                       </li>
@@ -145,12 +164,12 @@ export default function Projects() {
                 <div>
                   {/* Tech stack */}
                   <div className="flex flex-wrap gap-1.5 pt-4 border-t border-border/40">
-                    {project.stack.slice(0, 4).map(tech => (
+                    {project.stack && project.stack.slice(0, 4).map((tech: string) => (
                       <span key={tech} className="text-[10px] uppercase tracking-wider font-mono px-2 py-0.5 bg-border/50 text-text-primary rounded border border-white/5">
                         {tech}
                       </span>
                     ))}
-                    {project.stack.length > 4 && (
+                    {project.stack && project.stack.length > 4 && (
                       <span className="text-[10px] font-mono px-2 py-0.5 text-accent-cyan bg-border/20 rounded border border-white/5">
                         +{project.stack.length - 4} more
                       </span>

@@ -1,51 +1,99 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { 
-  FaHtml5, FaCss3Alt, FaReact, FaNodeJs, FaJs, FaPython, FaGitAlt, FaGithub, FaFigma 
-} from "react-icons/fa";
-import { SiTailwindcss, SiNextdotjs, SiExpress, SiMongodb, SiVercel } from "react-icons/si";
-import { VscVscode } from "react-icons/vsc";
+import * as FaIcons from "react-icons/fa";
+import * as SiIcons from "react-icons/si";
+import * as VscIcons from "react-icons/vsc";
 
-const skillCategories = [
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+const getIconComponent = (iconName: string) => {
+  if (iconName.startsWith("Fa")) return (FaIcons as any)[iconName];
+  if (iconName.startsWith("Si")) return (SiIcons as any)[iconName];
+  if (iconName.startsWith("Vsc")) return (VscIcons as any)[iconName];
+  return null;
+};
+
+// Static Fallback Data
+const fallbackCategories = [
   {
     title: "Frontend",
     skills: [
-      { name: "HTML", icon: FaHtml5 },
-      { name: "CSS", icon: FaCss3Alt },
-      { name: "Tailwind CSS", icon: SiTailwindcss },
-      { name: "React", icon: FaReact },
-      { name: "Next.js", icon: SiNextdotjs },
+      { name: "HTML", iconName: "FaHtml5" },
+      { name: "CSS", iconName: "FaCss3Alt" },
+      { name: "Tailwind CSS", iconName: "SiTailwindcss" },
+      { name: "React", iconName: "FaReact" },
+      { name: "Next.js", iconName: "SiNextdotjs" },
     ],
   },
   {
     title: "Backend",
     skills: [
-      { name: "Node.js", icon: FaNodeJs },
-      { name: "Express.js", icon: SiExpress },
-      { name: "MongoDB", icon: SiMongodb },
+      { name: "Node.js", iconName: "FaNodeJs" },
+      { name: "Express.js", iconName: "SiExpress" },
+      { name: "MongoDB", iconName: "SiMongodb" },
     ],
   },
   {
     title: "Languages",
     skills: [
-      { name: "JavaScript", icon: FaJs },
-      { name: "Python", icon: FaPython },
+      { name: "JavaScript", iconName: "FaJs" },
+      { name: "Python", iconName: "FaPython" },
     ],
   },
   {
     title: "Tools",
     skills: [
-      { name: "Git", icon: FaGitAlt },
-      { name: "GitHub", icon: FaGithub },
-      { name: "Figma", icon: FaFigma },
-      { name: "Vercel", icon: SiVercel },
-      { name: "VS Code", icon: VscVscode },
+      { name: "Git", iconName: "FaGitAlt" },
+      { name: "GitHub", iconName: "FaGithub" },
+      { name: "Figma", iconName: "FaFigma" },
+      { name: "Vercel", iconName: "SiVercel" },
+      { name: "VS Code", iconName: "VscVscode" },
     ],
   },
 ];
 
+interface Skill {
+  category: string;
+  name: string;
+  icon: string;
+}
+
 export default function Skills() {
+  const [skillCategories, setSkillCategories] = useState(
+    fallbackCategories.map(cat => ({
+      title: cat.title,
+      skills: cat.skills.map(s => ({ name: s.name, iconComponent: getIconComponent(s.iconName) }))
+    }))
+  );
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/skills`)
+      .then(res => {
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
+      .then((data: Skill[]) => {
+        if (data && data.length > 0) {
+          const categories = ["Frontend", "Backend", "Languages", "Tools"];
+          const grouped = categories.map(catTitle => {
+            const skillsInCat = data
+              .filter(s => s.category.toLowerCase() === catTitle.toLowerCase())
+              .map(s => ({
+                name: s.name,
+                iconComponent: getIconComponent(s.icon)
+              }));
+            return { title: catTitle, skills: skillsInCat };
+          });
+          setSkillCategories(grouped);
+        }
+      })
+      .catch(() => {
+        // Fallback already set
+      });
+  }, []);
+
   return (
     <section id="skills" className="py-32 bg-bg-surface/30">
       <div className="max-w-6xl mx-auto px-6">
@@ -62,7 +110,7 @@ export default function Skills() {
               </h3>
               <div className="space-y-4">
                 {category.skills.map((skill, skillIndex) => {
-                  const Icon = skill.icon;
+                  const Icon = skill.iconComponent;
                   return (
                     <motion.div
                       key={skill.name}

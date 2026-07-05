@@ -42,3 +42,7 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# server backend ignore rules
+/server/node_modules
+/server/.env
