@@ -17,7 +17,7 @@ const projects = [
     githubClient: "https://github.com/KAprachir/recipehub-client",
     githubServer: "https://github.com/KAprachir/recipehub-server",
     live: "https://recipehub-client-kappa.vercel.app",
-    image: "https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&q=80&w=600",
+    image: "/RecipeHub Picture.png",
   },
   {
     title: "HireLoop",
@@ -31,7 +31,7 @@ const projects = [
     githubClient: "https://github.com/KAprachir/HireLoop-Client",
     githubServer: "https://github.com/KAprachir/HireLoop-Server",
     live: "https://hire-loop-client-eta.vercel.app",
-    image: "https://images.unsplash.com/photo-1521791136368-1a46827d0adb?auto=format&fit=crop&q=80&w=600",
+    image: "/Hireloop picture.png",
   },
   {
     title: "IdeaVault",
@@ -44,7 +44,7 @@ const projects = [
     stack: ["Next.js", "Tailwind CSS", "Node.js", "Express.js", "MongoDB", "JWT", "Bcrypt"],
     githubClient: "https://github.com/KAprachir/assignment-9-client",
     live: "https://assignment-9-client-prachir.vercel.app",
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600",
+    image: "/IdeaVault picture.png",
   },
 ];
 
