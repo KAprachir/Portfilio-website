@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { LogOut, Plus, Trash, Edit, Save, PlusCircle, Briefcase, Code, User, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { LogOut, Plus, Trash, Edit, Save, PlusCircle, Briefcase, Code, User, Loader2, CheckCircle2, AlertCircle, Mail, BookOpen, Award, Check } from "lucide-react";
 import Link from "next/link";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
@@ -16,7 +16,7 @@ export default function AdminPage() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Dashboard Tabs
-  const [activeTab, setActiveTab] = useState<"hero" | "skills" | "projects">("hero");
+  const [activeTab, setActiveTab] = useState<"hero" | "skills" | "projects" | "timeline" | "blog" | "inbox">("hero");
 
   // Hero States
   const [heroData, setHeroData] = useState({
@@ -59,6 +59,39 @@ export default function AdminPage() {
   const [isSavingProject, setIsSavingProject] = useState(false);
   const [projectMessage, setProjectMessage] = useState({ type: "" as "success" | "error" | "", text: "" });
 
+  // Inbox Messages State
+  const [messages, setMessages] = useState([] as any[]);
+
+  // Blog States
+  const [posts, setPosts] = useState([] as any[]);
+  const [editingPostId, setEditingPostId] = useState<string | null>(null);
+  const [postForm, setPostForm] = useState({
+    title: "",
+    slug: "",
+    content: "",
+    summary: "",
+    tagsString: "",
+    readTime: "",
+    isPublished: true
+  });
+  const [isSavingPost, setIsSavingPost] = useState(false);
+  const [postMessage, setPostMessage] = useState({ type: "" as "success" | "error" | "", text: "" });
+
+  // Qualifications Timeline States
+  const [qualifications, setQualifications] = useState([] as any[]);
+  const [editingQualId, setEditingQualId] = useState<string | null>(null);
+  const [qualForm, setQualForm] = useState({
+    type: "Education" as "Education" | "Experience",
+    title: "",
+    subtitle: "",
+    duration: "",
+    detailsString: "",
+    tagsString: "",
+    certUrl: ""
+  });
+  const [isSavingQual, setIsSavingQual] = useState(false);
+  const [qualMessage, setQualMessage] = useState({ type: "" as "success" | "error" | "", text: "" });
+
   // Load token on startup
   useEffect(() => {
     const savedToken = localStorage.getItem("adminToken");
@@ -94,6 +127,31 @@ export default function AdminPage() {
       if (projectsRes.ok) {
         const data = await projectsRes.json();
         setProjects(data || []);
+      }
+
+      // Fetch Qualifications
+      const qualsRes = await fetch(`${API_BASE_URL}/api/qualifications`);
+      if (qualsRes.ok) {
+        const data = await qualsRes.json();
+        setQualifications(data || []);
+      }
+
+      // Fetch Blog Posts (Admin Auth)
+      const postsRes = await fetch(`${API_BASE_URL}/api/admin/posts`, {
+        headers: { "Authorization": `Bearer ${activeToken}` }
+      });
+      if (postsRes.ok) {
+        const data = await postsRes.json();
+        setPosts(data || []);
+      }
+
+      // Fetch Messages (Admin Auth)
+      const messagesRes = await fetch(`${API_BASE_URL}/api/messages`, {
+        headers: { "Authorization": `Bearer ${activeToken}` }
+      });
+      if (messagesRes.ok) {
+        const data = await messagesRes.json();
+        setMessages(data || []);
       }
     } catch (error) {
       console.error("Error fetching admin data:", error);
@@ -347,6 +405,243 @@ export default function AdminPage() {
   };
 
   // ----------------------------------------------------
+  // Message Inbox Actions
+  // ----------------------------------------------------
+  const handleToggleReadMessage = async (id: string, currentReadStatus: boolean) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/messages/${id}/read`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ isRead: !currentReadStatus })
+      });
+      if (res.ok) {
+        const updatedMsg = await res.json();
+        setMessages(prev => prev.map(m => m._id === id ? updatedMsg : m));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDeleteMessage = async (id: string) => {
+    if (!confirm("Delete this contact inquiry?")) return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/messages/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      if (res.ok) {
+        setMessages(prev => prev.filter(m => m._id !== id));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // ----------------------------------------------------
+  // Blog Post Actions
+  // ----------------------------------------------------
+  const handlePostSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!postForm.title.trim() || !postForm.slug.trim() || !postForm.content.trim() || !postForm.summary.trim()) {
+      setPostMessage({ type: "error", text: "Title, URL slug, summary, and post content are required." });
+      return;
+    }
+
+    setIsSavingPost(true);
+    setPostMessage({ type: "", text: "" });
+
+    const postPayload = {
+      title: postForm.title,
+      slug: postForm.slug.trim().toLowerCase().replace(/[^a-z0-9-_]/g, "-"),
+      content: postForm.content,
+      summary: postForm.summary,
+      tags: postForm.tagsString.split(",").map(t => t.trim()).filter(Boolean),
+      readTime: postForm.readTime || "3 min read",
+      isPublished: postForm.isPublished
+    };
+
+    try {
+      const url = editingPostId
+        ? `${API_BASE_URL}/api/posts/${editingPostId}`
+        : `${API_BASE_URL}/api/posts`;
+      const method = editingPostId ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(postPayload)
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        if (editingPostId) {
+          setPosts(prev => prev.map(p => p._id === editingPostId ? data : p));
+          setPostMessage({ type: "success", text: "Article updated successfully!" });
+        } else {
+          setPosts(prev => [data, ...prev]);
+          setPostMessage({ type: "success", text: "Article published successfully!" });
+        }
+        
+        // Reset Form
+        setEditingPostId(null);
+        setPostForm({
+          title: "",
+          slug: "",
+          content: "",
+          summary: "",
+          tagsString: "",
+          readTime: "",
+          isPublished: true
+        });
+      } else {
+        setPostMessage({ type: "error", text: data.error || "Failed to save blog post." });
+      }
+    } catch (error) {
+      setPostMessage({ type: "error", text: "Server connection failed." });
+    } finally {
+      setIsSavingPost(false);
+    }
+  };
+
+  const handleEditPost = (post: any) => {
+    setEditingPostId(post._id);
+    setPostForm({
+      title: post.title || "",
+      slug: post.slug || "",
+      content: post.content || "",
+      summary: post.summary || "",
+      tagsString: post.tags?.join(", ") || "",
+      readTime: post.readTime || "",
+      isPublished: post.isPublished !== undefined ? post.isPublished : true
+    });
+    window.scrollTo({ top: 300, behavior: 'smooth' });
+  };
+
+  const handleDeletePost = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this blog post?")) return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/posts/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      if (res.ok) {
+        setPosts(prev => prev.filter(p => p._id !== id));
+      } else {
+        alert("Failed to delete post.");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // ----------------------------------------------------
+  // Qualification Actions
+  // ----------------------------------------------------
+  const handleQualSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!qualForm.title.trim() || !qualForm.subtitle.trim() || !qualForm.duration.trim()) {
+      setQualMessage({ type: "error", text: "Title, institution/company, and duration are required." });
+      return;
+    }
+
+    setIsSavingQual(true);
+    setQualMessage({ type: "", text: "" });
+
+    const qualPayload = {
+      type: qualForm.type,
+      title: qualForm.title,
+      subtitle: qualForm.subtitle,
+      duration: qualForm.duration,
+      details: qualForm.detailsString.split("\n").map(d => d.trim()).filter(Boolean),
+      tags: qualForm.tagsString.split(",").map(t => t.trim()).filter(Boolean),
+      certUrl: qualForm.certUrl
+    };
+
+    try {
+      const url = editingQualId
+        ? `${API_BASE_URL}/api/qualifications/${editingQualId}`
+        : `${API_BASE_URL}/api/qualifications`;
+      const method = editingQualId ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(qualPayload)
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        if (editingQualId) {
+          setQualifications(prev => prev.map(q => q._id === editingQualId ? data : q));
+          setQualMessage({ type: "success", text: "Qualification updated successfully!" });
+        } else {
+          setQualifications(prev => [...prev, data]);
+          setQualMessage({ type: "success", text: "Qualification added successfully!" });
+        }
+
+        // Reset Form
+        setEditingQualId(null);
+        setQualForm({
+          type: "Education",
+          title: "",
+          subtitle: "",
+          duration: "",
+          detailsString: "",
+          tagsString: "",
+          certUrl: ""
+        });
+      } else {
+        setQualMessage({ type: "error", text: data.error || "Failed to save qualification." });
+      }
+    } catch (error) {
+      setQualMessage({ type: "error", text: "Server connection failed." });
+    } finally {
+      setIsSavingQual(false);
+    }
+  };
+
+  const handleEditQual = (qual: any) => {
+    setEditingQualId(qual._id);
+    setQualForm({
+      type: qual.type || "Education",
+      title: qual.title || "",
+      subtitle: qual.subtitle || "",
+      duration: qual.duration || "",
+      detailsString: qual.details?.join("\n") || "",
+      tagsString: qual.tags?.join(", ") || "",
+      certUrl: qual.certUrl || ""
+    });
+    window.scrollTo({ top: 300, behavior: 'smooth' });
+  };
+
+  const handleDeleteQual = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this qualification timeline item?")) return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/qualifications/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      if (res.ok) {
+        setQualifications(prev => prev.filter(q => q._id !== id));
+      } else {
+        alert("Failed to delete qualification.");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // ----------------------------------------------------
   // LOGIN SCREEN
   // ----------------------------------------------------
   if (!isAuthenticated) {
@@ -466,7 +761,7 @@ export default function AdminPage() {
 
         {/* Tab Controls */}
         <div className="flex gap-4 border-b border-border/40 overflow-x-auto pb-px scrollbar-none">
-          {(["hero", "skills", "projects"] as const).map((tab) => (
+          {(["hero", "skills", "projects", "timeline", "blog", "inbox"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -477,6 +772,19 @@ export default function AdminPage() {
               {tab === "hero" && <span className="flex items-center gap-2"><User size={16} />Hero Section</span>}
               {tab === "skills" && <span className="flex items-center gap-2"><Code size={16} />Tech Stack</span>}
               {tab === "projects" && <span className="flex items-center gap-2"><Briefcase size={16} />Projects</span>}
+              {tab === "timeline" && <span className="flex items-center gap-2"><Award size={16} />Timeline</span>}
+              {tab === "blog" && <span className="flex items-center gap-2"><BookOpen size={16} />Blog Articles</span>}
+              {tab === "inbox" && (
+                <span className="flex items-center gap-2">
+                  <Mail size={16} />
+                  Inbox
+                  {messages.filter(m => !m.isRead).length > 0 && (
+                    <span className="bg-accent-cyan text-bg-primary text-[10px] font-bold px-1.5 py-0.5 rounded-full font-mono">
+                      {messages.filter(m => !m.isRead).length}
+                    </span>
+                  )}
+                </span>
+              )}
               {activeTab === tab && (
                 <motion.div layoutId="adminTab" className="absolute bottom-0 left-0 w-full h-0.5 bg-accent-cyan" />
               )}
@@ -967,6 +1275,495 @@ export default function AdminPage() {
                     </div>
                   ))}
                 </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* TAB 4: QUALIFICATIONS TIMELINE CONFIG */}
+          {activeTab === "timeline" && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+            >
+              {/* Form to Add/Edit Timeline Item */}
+              <div className="bg-bg-surface border border-border rounded-xl p-6 h-fit space-y-6 lg:col-span-1">
+                <div className="border-b border-border/40 pb-4">
+                  <h3 className="text-xl font-bold font-mono text-accent-cyan">
+                    {editingQualId ? "Edit Item" : "Add Timeline Item"}
+                  </h3>
+                  <p className="text-xs text-text-muted font-mono">Insert or update education achievements and work milestones.</p>
+                </div>
+
+                <form onSubmit={handleQualSubmit} className="space-y-5">
+                  {qualMessage.text && (
+                    <div className={`p-4 rounded-lg border text-sm flex items-start gap-2 ${
+                      qualMessage.type === "success" ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-rose-500/10 border-rose-500/30 text-rose-400"
+                    }`}>
+                      {qualMessage.type === "success" ? <CheckCircle2 size={16} className="mt-0.5" /> : <AlertCircle size={16} className="mt-0.5" />}
+                      <span>{qualMessage.text}</span>
+                    </div>
+                  )}
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-text-muted">Item Type</label>
+                    <select
+                      value={qualForm.type}
+                      onChange={(e) => setQualForm({ ...qualForm, type: e.target.value as any })}
+                      className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm text-text-primary"
+                    >
+                      <option value="Education">Education</option>
+                      <option value="Experience">Experience</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-text-muted">Degree / Job Title</label>
+                    <input
+                      type="text"
+                      value={qualForm.title}
+                      onChange={(e) => setQualForm({ ...qualForm, title: e.target.value })}
+                      required
+                      placeholder="e.g. BBA in MIS"
+                      className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-text-muted">Institution / Company</label>
+                    <input
+                      type="text"
+                      value={qualForm.subtitle}
+                      onChange={(e) => setQualForm({ ...qualForm, subtitle: e.target.value })}
+                      required
+                      placeholder="e.g. Begum Rokeya University"
+                      className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-text-muted">Duration (Time Period)</label>
+                    <input
+                      type="text"
+                      value={qualForm.duration}
+                      onChange={(e) => setQualForm({ ...qualForm, duration: e.target.value })}
+                      required
+                      placeholder="e.g. 2021–Present or 2024"
+                      className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-text-muted">Bullet Point Details (one per line)</label>
+                    <textarea
+                      rows={4}
+                      value={qualForm.detailsString}
+                      onChange={(e) => setQualForm({ ...qualForm, detailsString: e.target.value })}
+                      placeholder="Focusing on Database Management...&#10;Majoring in MIS..."
+                      className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs font-mono leading-relaxed"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-text-muted">Tags (separated by comma)</label>
+                    <input
+                      type="text"
+                      value={qualForm.tagsString}
+                      onChange={(e) => setQualForm({ ...qualForm, tagsString: e.target.value })}
+                      placeholder="MIS, Database Management"
+                      className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-text-muted">Credential / Certificate URL (optional)</label>
+                    <input
+                      type="text"
+                      value={qualForm.certUrl}
+                      onChange={(e) => setQualForm({ ...qualForm, certUrl: e.target.value })}
+                      placeholder="https://..."
+                      className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                    />
+                  </div>
+
+                  <div className="flex gap-3 pt-2">
+                    <button
+                      type="submit"
+                      disabled={isSavingQual}
+                      className="flex-1 py-3 bg-accent-cyan text-bg-primary font-bold rounded-lg flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all font-mono text-sm disabled:opacity-50"
+                    >
+                      {isSavingQual ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                      Save Item
+                    </button>
+                    {editingQualId && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingQualId(null);
+                          setQualForm({
+                            type: "Education",
+                            title: "",
+                            subtitle: "",
+                            duration: "",
+                            detailsString: "",
+                            tagsString: "",
+                            certUrl: ""
+                          });
+                        }}
+                        className="py-3 px-4 bg-white/5 border border-white/10 hover:bg-white/10 rounded-lg text-xs font-mono"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
+                </form>
+              </div>
+
+              {/* Qualifications timeline list */}
+              <div className="bg-bg-surface border border-border rounded-xl p-6 md:p-8 space-y-6 lg:col-span-2">
+                <div className="border-b border-border/40 pb-4">
+                  <h3 className="text-xl font-bold font-mono text-accent-cyan">Active Timeline Items</h3>
+                  <p className="text-xs text-text-muted font-mono">Manage qualifications displaying on your home page timeline.</p>
+                </div>
+
+                <div className="space-y-4">
+                  {qualifications.length === 0 ? (
+                    <p className="text-xs font-mono text-text-muted">No qualifications found in the database.</p>
+                  ) : (
+                    qualifications.map((qual) => (
+                      <div
+                        key={qual._id}
+                        className="border border-border rounded-xl p-4 bg-[#0d0d14] hover:border-accent-cyan/20 transition-colors flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+                      >
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-mono px-2 py-0.5 bg-border/40 text-text-primary rounded border border-white/5">
+                              {qual.type}
+                            </span>
+                            <span className="text-xs font-mono text-text-muted">{qual.duration}</span>
+                          </div>
+                          <h4 className="font-bold text-accent-cyan font-mono text-base mt-2">{qual.title}</h4>
+                          <p className="text-xs text-text-muted font-mono">{qual.subtitle}</p>
+                        </div>
+
+                        <div className="flex gap-2 w-full md:w-auto">
+                          <button
+                            onClick={() => handleEditQual(qual)}
+                            className="flex-1 md:flex-none py-2 px-4 bg-white/5 border border-white/10 text-text-primary rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-1.5 hover:bg-white/10 transition-all"
+                          >
+                            <Edit size={12} />
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteQual(qual._id)}
+                            className="flex-1 md:flex-none py-2 px-4 bg-rose-500/10 border border-rose-500/10 text-rose-400 rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-1.5 hover:bg-rose-500/20 transition-all"
+                          >
+                            <Trash size={12} />
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* TAB 5: BLOG ARTICLES ENGINE CONFIG */}
+          {activeTab === "blog" && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+            >
+              {/* Form to Write/Edit Article */}
+              <div className="bg-bg-surface border border-border rounded-xl p-6 h-fit space-y-6 lg:col-span-1">
+                <div className="border-b border-border/40 pb-4">
+                  <h3 className="text-xl font-bold font-mono text-accent-cyan">
+                    {editingPostId ? "Edit Article" : "Write Article"}
+                  </h3>
+                  <p className="text-xs text-text-muted font-mono">Publish updates, tech case studies, and business ideas.</p>
+                </div>
+
+                <form onSubmit={handlePostSubmit} className="space-y-5">
+                  {postMessage.text && (
+                    <div className={`p-4 rounded-lg border text-sm flex items-start gap-2 ${
+                      postMessage.type === "success" ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-rose-500/10 border-rose-500/30 text-rose-400"
+                    }`}>
+                      {postMessage.type === "success" ? <CheckCircle2 size={16} className="mt-0.5" /> : <AlertCircle size={16} className="mt-0.5" />}
+                      <span>{postMessage.text}</span>
+                    </div>
+                  )}
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-text-muted">Article Title</label>
+                    <input
+                      type="text"
+                      value={postForm.title}
+                      onChange={(e) => {
+                        const newTitle = e.target.value;
+                        const generatedSlug = newTitle.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+                        setPostForm({ ...postForm, title: newTitle, slug: editingPostId ? postForm.slug : generatedSlug });
+                      }}
+                      required
+                      placeholder="e.g. Bridging MIS and Web Development"
+                      className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-text-muted">URL Slug (safely generated)</label>
+                    <input
+                      type="text"
+                      value={postForm.slug}
+                      onChange={(e) => setPostForm({ ...postForm, slug: e.target.value })}
+                      required
+                      placeholder="e.g. bridging-mis-and-web-development"
+                      className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm font-mono text-accent-cyan"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-text-muted">Article Summary (Short Preview)</label>
+                    <textarea
+                      rows={2}
+                      value={postForm.summary}
+                      onChange={(e) => setPostForm({ ...postForm, summary: e.target.value })}
+                      required
+                      placeholder="Summarize the core premise of your article..."
+                      className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs leading-relaxed"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-mono text-text-muted">Read Time</label>
+                      <input
+                        type="text"
+                        value={postForm.readTime}
+                        onChange={(e) => setPostForm({ ...postForm, readTime: e.target.value })}
+                        placeholder="e.g. 5 min read"
+                        className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-mono text-text-muted">Tags (separated by comma)</label>
+                      <input
+                        type="text"
+                        value={postForm.tagsString}
+                        onChange={(e) => setPostForm({ ...postForm, tagsString: e.target.value })}
+                        placeholder="MIS, Engineering"
+                        className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-text-muted">Article Content (Markdown supported: **bold**, `code` blocks)</label>
+                    <textarea
+                      rows={8}
+                      value={postForm.content}
+                      onChange={(e) => setPostForm({ ...postForm, content: e.target.value })}
+                      required
+                      placeholder="Write your article content here..."
+                      className="w-full bg-[#0d0d14] border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs font-mono leading-relaxed"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-3 py-1">
+                    <input
+                      type="checkbox"
+                      id="isPublished"
+                      checked={postForm.isPublished}
+                      onChange={(e) => setPostForm({ ...postForm, isPublished: e.target.checked })}
+                      className="w-4 h-4 rounded accent-accent-cyan bg-bg-surface border border-border focus:ring-0 focus:outline-none cursor-pointer"
+                    />
+                    <label htmlFor="isPublished" className="text-xs font-mono text-text-primary cursor-pointer select-none">
+                      Publish Immediately (Draft if unchecked)
+                    </label>
+                  </div>
+
+                  <div className="flex gap-3 pt-2">
+                    <button
+                      type="submit"
+                      disabled={isSavingPost}
+                      className="flex-1 py-3 bg-accent-cyan text-bg-primary font-bold rounded-lg flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all font-mono text-sm disabled:opacity-50"
+                    >
+                      {isSavingPost ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                      Publish Post
+                    </button>
+                    {editingPostId && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingPostId(null);
+                          setPostForm({
+                            title: "",
+                            slug: "",
+                            content: "",
+                            summary: "",
+                            tagsString: "",
+                            readTime: "",
+                            isPublished: true
+                          });
+                        }}
+                        className="py-3 px-4 bg-white/5 border border-white/10 hover:bg-white/10 rounded-lg text-xs font-mono"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
+                </form>
+              </div>
+
+              {/* Blog articles list */}
+              <div className="bg-bg-surface border border-border rounded-xl p-6 md:p-8 space-y-6 lg:col-span-2">
+                <div className="border-b border-border/40 pb-4">
+                  <h3 className="text-xl font-bold font-mono text-accent-cyan">Article Catalog</h3>
+                  <p className="text-xs text-text-muted font-mono">Edit draft entries and view live posts.</p>
+                </div>
+
+                <div className="space-y-4">
+                  {posts.length === 0 ? (
+                    <p className="text-xs font-mono text-text-muted">No posts found in the database.</p>
+                  ) : (
+                    posts.map((post) => (
+                      <div
+                        key={post._id}
+                        className="border border-border rounded-xl p-4 bg-[#0d0d14] hover:border-accent-cyan/20 transition-colors flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+                      >
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+                              post.isPublished 
+                                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" 
+                                : "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"
+                            }`}>
+                              {post.isPublished ? "Live" : "Draft"}
+                            </span>
+                            <span className="text-xs font-mono text-text-muted">/{post.slug}</span>
+                          </div>
+                          <h4 className="font-bold text-accent-cyan font-mono text-base mt-2">{post.title}</h4>
+                          <p className="text-xs text-text-muted font-mono">{post.summary}</p>
+                        </div>
+
+                        <div className="flex gap-2 w-full md:w-auto">
+                          <button
+                            onClick={() => handleEditPost(post)}
+                            className="flex-1 md:flex-none py-2 px-4 bg-white/5 border border-white/10 text-text-primary rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-1.5 hover:bg-white/10 transition-all"
+                          >
+                            <Edit size={12} />
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeletePost(post._id)}
+                            className="flex-1 md:flex-none py-2 px-4 bg-rose-500/10 border border-rose-500/10 text-rose-400 rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-1.5 hover:bg-rose-500/20 transition-all"
+                          >
+                            <Trash size={12} />
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* TAB 6: INBOX MESSAGES CONFIG */}
+          {activeTab === "inbox" && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-bg-surface border border-border rounded-xl p-6 md:p-8 space-y-6"
+            >
+              <div className="border-b border-border/40 pb-4 flex justify-between items-center flex-wrap gap-4">
+                <div>
+                  <h3 className="text-xl font-bold font-mono text-accent-cyan">Message Inbox</h3>
+                  <p className="text-xs text-text-muted font-mono">Review contact inquiries submitted on your website.</p>
+                </div>
+                <div className="flex items-center gap-4 text-xs font-mono">
+                  <span className="text-text-muted">Total: <strong className="text-text-primary">{messages.length}</strong></span>
+                  <span className="text-text-muted">Unread: <strong className="text-accent-cyan">{messages.filter(m => !m.isRead).length}</strong></span>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {messages.length === 0 ? (
+                  <div className="py-12 text-center border border-border/30 rounded-xl bg-[#0d0d14] max-w-md mx-auto">
+                    <p className="text-sm font-mono text-text-muted">No messages in your inbox.</p>
+                  </div>
+                ) : (
+                  messages.map((msg) => (
+                    <div
+                      key={msg._id}
+                      className={`border rounded-xl overflow-hidden bg-[#0d0d14] transition-all duration-300 ${
+                        msg.isRead ? "border-border opacity-75" : "border-accent-cyan/40 shadow-[0_0_15px_rgba(0,212,255,0.03)]"
+                      }`}
+                    >
+                      {/* Message Header */}
+                      <div className="bg-border/10 px-4 py-3 flex flex-col md:flex-row justify-between items-start md:items-center border-b border-border/40 gap-3">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${msg.isRead ? "bg-text-muted/40" : "bg-accent-cyan animate-pulse"}`} />
+                          <h4 className="font-bold text-sm font-mono text-text-primary">{msg.name}</h4>
+                          <span className="text-xs font-mono text-text-muted">&lt;{msg.email}&gt;</span>
+                        </div>
+                        <span className="text-xs font-mono text-text-muted shrink-0">
+                          {new Date(msg.createdAt).toLocaleString("en-US", {
+                            dateStyle: "medium",
+                            timeStyle: "short"
+                          })}
+                        </span>
+                      </div>
+
+                      {/* Message Body */}
+                      <div className="p-5 space-y-4">
+                        <div>
+                          <p className="text-xs font-mono text-accent-cyan">// Subject</p>
+                          <p className="text-sm font-bold text-text-primary mt-1 font-mono">{msg.subject || "No Subject"}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-mono text-accent-violet">// Inquiry Message</p>
+                          <p className="text-sm text-text-muted mt-1 leading-relaxed whitespace-pre-wrap select-all font-sans">
+                            {msg.message}
+                          </p>
+                        </div>
+
+                        {/* Actions block */}
+                        <div className="border-t border-border/20 pt-4 flex gap-3 justify-end">
+                          <button
+                            onClick={() => handleToggleReadMessage(msg._id, msg.isRead)}
+                            className={`py-1.5 px-3 border rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition-all ${
+                              msg.isRead 
+                                ? "bg-white/5 border-white/10 text-text-primary hover:bg-white/10" 
+                                : "bg-accent-cyan/10 border-accent-cyan/20 text-accent-cyan hover:bg-accent-cyan/20"
+                            }`}
+                          >
+                            {msg.isRead ? (
+                              <>
+                                Mark Unread
+                              </>
+                            ) : (
+                              <>
+                                <Check size={12} />
+                                Mark Read
+                              </>
+                            )}
+                          </button>
+                          <button
+                            onClick={() => handleDeleteMessage(msg._id)}
+                            className="py-1.5 px-3 bg-rose-500/10 border border-rose-500/10 text-rose-400 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 hover:bg-rose-500/20 transition-all"
+                          >
+                            <Trash size={12} />
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </motion.div>
           )}

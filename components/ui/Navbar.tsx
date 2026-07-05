@@ -12,12 +12,13 @@ function cn(...inputs: ClassValue[]) {
 }
 
 const navLinks = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Projects", href: "#projects" },
-  { name: "Qualifications", href: "#qualifications" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "/#home" },
+  { name: "About", href: "/#about" },
+  { name: "Skills", href: "/#skills" },
+  { name: "Projects", href: "/#projects" },
+  { name: "Qualifications", href: "/#qualifications" },
+  { name: "Blog", href: "/blog" },
+  { name: "Contact", href: "/#contact" },
 ];
 
 export default function Navbar() {
@@ -30,7 +31,10 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
       
-      const sections = navLinks.map(link => link.href.substring(1));
+      const sections = navLinks
+        .map(link => link.href.startsWith("/#") ? link.href.substring(2) : "")
+        .filter(Boolean);
+        
       const current = sections.find(section => {
         const el = document.getElementById(section);
         if (el) {
@@ -75,6 +79,14 @@ export default function Navbar() {
     }
   };
 
+  const getLinkActiveState = (linkHref: string) => {
+    if (linkHref === "/blog") {
+      return typeof window !== "undefined" && window.location.pathname.startsWith("/blog");
+    }
+    const cleanSection = linkHref.replace("/#", "");
+    return activeSection === cleanSection;
+  };
+
   return (
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
@@ -86,30 +98,33 @@ export default function Navbar() {
       )}
     >
       <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
-        <Link href="#home" className="text-2xl font-bold font-mono text-accent-cyan">
+        <Link href="/#home" className="text-2xl font-bold font-mono text-accent-cyan">
           &lt;Prachir /&gt;
         </Link>
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className={cn(
-                "text-sm font-medium transition-colors hover:text-accent-cyan relative py-1",
-                activeSection === link.href.substring(1) ? "text-accent-cyan" : "text-text-muted"
-              )}
-            >
-              {link.name}
-              {activeSection === link.href.substring(1) && (
-                <motion.div
-                  layoutId="activeUnderline"
-                  className="absolute bottom-0 left-0 w-full h-[1px] bg-accent-cyan"
-                />
-              )}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = getLinkActiveState(link.href);
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-accent-cyan relative py-1",
+                  isActive ? "text-accent-cyan" : "text-text-muted"
+                )}
+              >
+                {link.name}
+                {isActive && (
+                  <motion.div
+                    layoutId="activeUnderline"
+                    className="absolute bottom-0 left-0 w-full h-[1px] bg-accent-cyan"
+                  />
+                )}
+              </Link>
+            );
+          })}
           
           {/* Desktop Theme Switcher */}
           <button
@@ -157,25 +172,28 @@ export default function Navbar() {
             >
               <X size={32} />
             </button>
-            {navLinks.map((link, i) => (
-              <motion.div
-                key={link.name}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <Link
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className={cn(
-                    "text-3xl font-bold font-mono transition-colors",
-                    activeSection === link.href.substring(1) ? "text-accent-cyan" : "text-text-muted"
-                  )}
+            {navLinks.map((link, i) => {
+              const isActive = getLinkActiveState(link.href);
+              return (
+                <motion.div
+                  key={link.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
                 >
-                  {link.name}
-                </Link>
-              </motion.div>
-            ))}
+                  <Link
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className={cn(
+                      "text-3xl font-bold font-mono transition-colors",
+                      isActive ? "text-accent-cyan" : "text-text-muted"
+                    )}
+                  >
+                    {link.name}
+                  </Link>
+                </motion.div>
+              );
+            })}
           </motion.div>
         )}
       </AnimatePresence>

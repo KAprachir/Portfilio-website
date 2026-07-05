@@ -87,6 +87,23 @@ export async function POST(req: NextRequest) {
     // 4. Send Email
     await transporter.sendMail(mailOptions);
 
+    // 5. Store message in database (MongoDB Atlas)
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    try {
+      await fetch(`${API_BASE_URL}/api/messages`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          subject: "Portfolio Contact Form Inquiry",
+          message
+        })
+      });
+    } catch (dbErr) {
+      console.error("Failed to store contact inquiry in MongoDB Atlas:", dbErr);
+    }
+
     return NextResponse.json(
       { message: "Message sent successfully!" },
       { status: 200 }

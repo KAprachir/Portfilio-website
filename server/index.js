@@ -5,7 +5,7 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const { Hero, Skill, Project, Admin } = require('./models/Schemas');
+const { Hero, Skill, Project, Admin, Message, Post, Qualification } = require('./models/Schemas');
 
 const app = express();
 app.use(cors());
@@ -159,6 +159,50 @@ async function seedDatabase() {
       await Project.insertMany(defaultProjects);
       console.log("Default Projects data seeded.");
     }
+
+    // 5. Seed Qualifications
+    const qualCount = await Qualification.countDocuments();
+    if (qualCount === 0) {
+      const defaultQuals = [
+        {
+          type: "Education",
+          title: "BBA in MIS",
+          subtitle: "Begum Rokeya University",
+          duration: "2021–Present",
+          details: [
+            "Focusing on Database Management, IT Investment, Business Research, Supply Chain, and International Business.",
+            "Majoring in Management Information Systems."
+          ],
+          tags: ["MIS", "Business IT", "Database Management"]
+        },
+        {
+          type: "Education",
+          title: "Web Dev Bootcamp",
+          subtitle: "Programming Hero",
+          duration: "2023–2024",
+          details: ["Intensive training in Full Stack Development with React, Node.js, and MongoDB."],
+          tags: ["MERN Stack", "JavaScript", "Full Stack"]
+        },
+        {
+          type: "Experience",
+          title: "AI Fluency for Students",
+          subtitle: "Anthropic Academy",
+          duration: "2024",
+          details: ["Certification in prompt engineering and AI strategy for productivity."],
+          tags: ["Prompt Engineering", "AI Productivity", "Anthropic Claude"]
+        },
+        {
+          type: "Experience",
+          title: "Self-taught Developer",
+          subtitle: "React, Next.js, Node.js",
+          duration: "2022–Present",
+          details: ["Built several full-stack projects using modern web technologies and best practices."],
+          tags: ["Next.js", "Framer Motion", "State Management"]
+        }
+      ];
+      await Qualification.insertMany(defaultQuals);
+      console.log("Default Qualifications seeded.");
+    }
   } catch (error) {
     console.error("Database seeding failed:", error);
   }
@@ -195,6 +239,53 @@ app.get('/api/projects', async (req, res) => {
     res.json(projects);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch projects data" });
+  }
+});
+
+// Get Qualifications (Public)
+app.get('/api/qualifications', async (req, res) => {
+  try {
+    const qualifications = await Qualification.find().sort({ createdAt: 1 });
+    res.json(qualifications);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch qualifications" });
+  }
+});
+
+// Get Published Blog Posts (Public)
+app.get('/api/posts', async (req, res) => {
+  try {
+    const posts = await Post.find({ isPublished: true }).sort({ createdAt: -1 });
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch blog posts" });
+  }
+});
+
+// Get Single Blog Post by Slug (Public)
+app.get('/api/posts/:slug', async (req, res) => {
+  try {
+    const post = await Post.findOne({ slug: req.params.slug, isPublished: true });
+    if (!post) {
+      return res.status(404).json({ error: "Blog post not found" });
+    }
+    res.json(post);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch blog post" });
+  }
+});
+
+// Submit Contact Message (Public)
+app.post('/api/messages', async (req, res) => {
+  try {
+    const { name, email, subject, message } = req.body;
+    if (!name || !email || !subject || !message) {
+      return res.status(400).json({ error: "All contact fields are required" });
+    }
+    const newMessage = await Message.create({ name, email, subject, message });
+    res.status(201).json(newMessage);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to submit message inquiry" });
   }
 });
 
@@ -320,6 +411,148 @@ app.delete('/api/projects/:id', authenticateJWT, async (req, res) => {
     res.json({ message: "Project deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Failed to delete project" });
+  }
+});
+
+// ----------------------------------------------------
+// Protected Messages Endpoints
+// ----------------------------------------------------
+
+// Get All Messages (Admin only)
+app.get('/api/messages', authenticateJWT, async (req, res) => {
+  try {
+    const messages = await Message.find().sort({ createdAt: -1 });
+    res.json(messages);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch messages" });
+  }
+});
+
+// Toggle Read Status of Message (Admin only)
+app.put('/api/messages/:id/read', authenticateJWT, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isRead } = req.body;
+    const message = await Message.findByIdAndUpdate(id, { isRead }, { new: true });
+    res.json(message);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update message status" });
+  }
+});
+
+// Delete Message (Admin only)
+app.delete('/api/messages/:id', authenticateJWT, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Message.findByIdAndDelete(id);
+    res.json({ message: "Message deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete message" });
+  }
+});
+
+// ----------------------------------------------------
+// Protected Qualifications Endpoints
+// ----------------------------------------------------
+
+// Create Qualification (Admin only)
+app.post('/api/qualifications', authenticateJWT, async (req, res) => {
+  try {
+    const { type, title, subtitle, duration, details, tags, certUrl } = req.body;
+    if (!type || !title || !subtitle || !duration) {
+      return res.status(400).json({ error: "Type, title, subtitle, and duration are required" });
+    }
+    const qualification = await Qualification.create({
+      type, title, subtitle, duration, details, tags, certUrl
+    });
+    res.status(201).json(qualification);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create qualification" });
+  }
+});
+
+// Update Qualification (Admin only)
+app.put('/api/qualifications/:id', authenticateJWT, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { type, title, subtitle, duration, details, tags, certUrl } = req.body;
+    const qualification = await Qualification.findByIdAndUpdate(id, {
+      type, title, subtitle, duration, details, tags, certUrl
+    }, { new: true });
+    res.json(qualification);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update qualification" });
+  }
+});
+
+// Delete Qualification (Admin only)
+app.delete('/api/qualifications/:id', authenticateJWT, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Qualification.findByIdAndDelete(id);
+    res.json({ message: "Qualification deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete qualification" });
+  }
+});
+
+// ----------------------------------------------------
+// Protected Blog Endpoints
+// ----------------------------------------------------
+
+// Get All Blog Posts (Admin only - includes unpublished)
+app.get('/api/admin/posts', authenticateJWT, async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ createdAt: -1 });
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch admin posts" });
+  }
+});
+
+// Create Blog Post (Admin only)
+app.post('/api/posts', authenticateJWT, async (req, res) => {
+  try {
+    const { title, slug, content, summary, tags, readTime, isPublished } = req.body;
+    if (!title || !slug || !content || !summary) {
+      return res.status(400).json({ error: "Title, slug, content, and summary are required" });
+    }
+    // Check if slug is unique
+    const existing = await Post.findOne({ slug });
+    if (existing) {
+      return res.status(400).json({ error: "A blog post with this slug already exists" });
+    }
+    const post = await Post.create({
+      title, slug, content, summary, tags, readTime, isPublished
+    });
+    res.status(201).json(post);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create blog post" });
+  }
+});
+
+// Update Blog Post (Admin only)
+app.put('/api/posts/:id', authenticateJWT, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, slug, content, summary, tags, readTime, isPublished } = req.body;
+    const post = await Post.findByIdAndUpdate(id, {
+      title, slug, content, summary, tags, readTime, isPublished
+    }, { new: true });
+    res.json(post);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update blog post" });
+  }
+});
+
+// Delete Blog Post (Admin only)
+app.delete('/api/posts/:id', authenticateJWT, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Post.findByIdAndDelete(id);
+    res.json({ message: "Blog post deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete blog post" });
   }
 });
 
