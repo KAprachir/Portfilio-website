@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import Link from "next/link";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -24,6 +24,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,6 +45,35 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Initialize theme
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+      if (savedTheme === "light") {
+        document.documentElement.classList.add("light");
+      }
+    } else {
+      const systemPreference = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      setTheme(systemPreference);
+      if (systemPreference === "light") {
+        document.documentElement.classList.add("light");
+      }
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    if (theme === "dark") {
+      setTheme("light");
+      document.documentElement.classList.add("light");
+      localStorage.setItem("theme", "light");
+    } else {
+      setTheme("dark");
+      document.documentElement.classList.remove("light");
+      localStorage.setItem("theme", "dark");
+    }
+  };
 
   return (
     <motion.nav
@@ -80,15 +110,35 @@ export default function Navbar() {
               )}
             </Link>
           ))}
+          
+          {/* Desktop Theme Switcher */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-border/30 text-text-primary hover:text-accent-cyan transition-colors"
+            aria-label="Toggle Theme"
+          >
+            {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+          </button>
         </div>
 
-        {/* Mobile Toggle */}
-        <button
-          className="md:hidden text-text-primary p-2"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X /> : <Menu />}
-        </button>
+        {/* Mobile Header Controls */}
+        <div className="flex items-center gap-2 md:hidden">
+          {/* Mobile Theme Switcher */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-border/30 text-text-primary hover:text-accent-cyan transition-colors"
+            aria-label="Toggle Theme"
+          >
+            {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+          </button>
+
+          <button
+            className="text-text-primary p-2"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Overlay */}

@@ -12,6 +12,16 @@
   --border: #1e293b;
 }
 
+.light {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --accent-cyan: #0284c7;
+  --accent-violet: #6d28d9;
+  --text-primary: #0f172a;
+  --text-muted: #475569;
+  --border: #e2e8f0;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -55,6 +65,11 @@ h1, h2, h3, h4, h5, h6, .font-mono {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.light .glass {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
 /* Hero background pattern */
 .bg-dot-pattern {
   background-image: radial-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px);
@@ -84,3 +99,29 @@ h1, h2, h3, h4, h5, h6, .font-mono {
   background: var(--accent-cyan);
   z-index: 10000;
 }
+
+/* Card Mouse Hover Glow Trail Effect */
+.card-glow {
+  position: relative;
+}
+
+.card-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0px;
+  border-radius: inherit;
+  background: radial-gradient(
+    300px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    rgba(0, 212, 255, 0.08),
+    transparent 70%
+  );
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card-glow:hover::before {
+  opacity: 1;
+}
+

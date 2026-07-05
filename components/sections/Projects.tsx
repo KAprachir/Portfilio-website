@@ -1,17 +1,27 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
+import { Info } from "lucide-react";
 import Link from "next/link";
+import ProjectModal from "@/components/ui/ProjectModal";
 
 const projects = [
   {
     title: "RecipeHub",
-    description: "A full-stack recipe sharing platform where food enthusiasts can create, discover, and manage recipes. Users browse community content, save favorites, and upgrade to premium to unlock unlimited publishing.",
+    description: "A full-stack recipe sharing platform where food enthusiasts can create, discover, and manage recipes. Features role-based access control, premium memberships, and moderation tools.",
+    longDescription: "RecipeHub is a full-stack recipe sharing platform built for food enthusiasts. Free users can post up to 2 recipes, while upgrading to a premium membership via Stripe unlocks unlimited publishing. The platform implements secure session-based authentication using Better Auth, and integrates robust admin moderation utilities to manage offensive or copyrighted content.",
     features: [
       "Role-based access (User vs Admin) & recipe moderation",
       "Stripe-integrated subscriptions for unlimited recipe publishing",
       "Dynamic MongoDB filtering by category, pagination, and real-time likes/favorites"
+    ],
+    technicalDetails: [
+      "Secured with Better Auth supporting both Credentials and Google OAuth 2.0 logins",
+      "Stripe Checkout API integration with secure server-side webhook validations",
+      "Robust Admin Panel with user management, recipe moderation, and reports handling",
+      "Optimized MongoDB aggregations for dynamic filtering, sorting, and pagination"
     ],
     stack: ["Next.js", "Tailwind CSS", "HeroUI", "Framer Motion", "Node.js", "Express.js", "MongoDB", "Better Auth", "Stripe"],
     githubClient: "https://github.com/KAprachir/recipehub-client",
@@ -22,10 +32,17 @@ const projects = [
   {
     title: "HireLoop",
     description: "A premium career portal designed to bridge the gap between job seekers and employers. Features a custom candidate pipeline, recruiter analytics, and subscription tiers.",
+    longDescription: "HireLoop is a premium career portal designed to bridge the gap between job seekers, recruiters, and platform administrators. Recruiters can purchase subscription tiers to unlock recruiter capabilities, post jobs, and manage candidates. Job seekers can build their profiles, apply to jobs, and track their application progress through a dedicated applicant tracking pipeline.",
     features: [
       "Three roles: Seeker, Recruiter, and Admin, each with unique dashboards",
       "Custom Applicant Tracking System (ATS) pipeline workflow",
       "Subscription analytics dashboard and Stripe payment integration"
+    ],
+    technicalDetails: [
+      "Custom Applicant Tracking System (ATS) pipeline workflow supporting state transitions",
+      "Role-based multi-dashboard architecture with granular routing guards",
+      "Stripe subscriptions integration for recruiter account upgrades",
+      "Smart keyword searches matching candidates based on skill criteria"
     ],
     stack: ["Next.js", "Tailwind CSS", "HeroUI", "Motion", "Node.js", "Express.js", "MongoDB", "Better Auth", "Stripe"],
     githubClient: "https://github.com/KAprachir/HireLoop-Client",
@@ -36,10 +53,17 @@ const projects = [
   {
     title: "IdeaVault",
     description: "A collaborative platform where entrepreneurs and innovators share, discover, and validate startup ideas through community engagement and peer feedback.",
+    longDescription: "IdeaVault is a collaborative workspace where developers and startup founders can pitch, share, and validate business ideas. It features a complete community discussion system, interactive search features, and instant category filters to streamline idea exploration.",
     features: [
       "Nested comment system with full CRUD interactive features",
       "Stateless JWT authentication and Google OAuth 2.0 login",
       "Real-time client-side keyword search and instant category filter"
+    ],
+    technicalDetails: [
+      "Stateless JWT-based user authentication combined with Google OAuth 2.0 flows",
+      "Nested comment systems supporting recursive CRUD operations",
+      "Client-side real-time fuzzy search and instant category filter indexing",
+      "Persistent state theme manager synced with browser localStorage"
     ],
     stack: ["Next.js", "Tailwind CSS", "Node.js", "Express.js", "MongoDB", "JWT", "Bcrypt"],
     githubClient: "https://github.com/KAprachir/assignment-9-client",
@@ -49,6 +73,17 @@ const projects = [
 ];
 
 export default function Projects() {
+  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty("--mouse-x", `${x}px`);
+    card.style.setProperty("--mouse-y", `${y}px`);
+  };
+
   return (
     <section id="projects" className="py-32">
       <div className="max-w-6xl mx-auto px-6">
@@ -66,7 +101,9 @@ export default function Projects() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -10 }}
-              className="group bg-bg-surface border border-border rounded-xl overflow-hidden relative flex flex-col h-full"
+              onMouseMove={handleMouseMove}
+              onClick={() => setSelectedProject(project)}
+              className="group card-glow bg-bg-surface border border-border hover:border-accent-cyan/40 rounded-xl overflow-hidden relative flex flex-col h-full cursor-pointer transition-colors duration-300"
             >
               <div className="aspect-video w-full overflow-hidden relative border-b border-border/40">
                 <img 
@@ -76,33 +113,48 @@ export default function Projects() {
                 />
                 {/* Subtle dark overlay to blend white-bg screenshots into the dark theme */}
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
+                
+                {/* Quick Details indicator */}
+                <div className="absolute top-3 right-3 p-1.5 bg-black/60 text-accent-cyan rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                  <Info size={14} />
+                </div>
               </div>
               
               <div className="p-6 flex-1 flex flex-col justify-between">
                 <div>
                   <h3 className="text-xl font-bold font-mono mb-3 text-accent-cyan">{project.title}</h3>
-                  <p className="text-text-muted text-sm mb-4">
+                  <p className="text-text-muted text-sm mb-4 line-clamp-3">
                     {project.description}
                   </p>
                   
                   <ul className="space-y-2 mb-6 text-xs text-text-muted list-none pl-0">
-                    {project.features.map((feature, fIdx) => (
+                    {project.features.slice(0, 2).map((feature, fIdx) => (
                       <li key={fIdx} className="flex items-start gap-2">
                         <span className="text-accent-cyan mt-0.5 font-mono text-[8px]">■</span>
-                        <span>{feature}</span>
+                        <span className="line-clamp-1">{feature}</span>
                       </li>
                     ))}
+                    {project.features.length > 2 && (
+                      <li className="text-[10px] text-accent-cyan font-mono pl-3">
+                        + click to view all features
+                      </li>
+                    )}
                   </ul>
                 </div>
                 
                 <div>
                   {/* Tech stack */}
                   <div className="flex flex-wrap gap-1.5 pt-4 border-t border-border/40">
-                    {project.stack.map(tech => (
+                    {project.stack.slice(0, 4).map(tech => (
                       <span key={tech} className="text-[10px] uppercase tracking-wider font-mono px-2 py-0.5 bg-border/50 text-text-primary rounded border border-white/5">
                         {tech}
                       </span>
                     ))}
+                    {project.stack.length > 4 && (
+                      <span className="text-[10px] font-mono px-2 py-0.5 text-accent-cyan bg-border/20 rounded border border-white/5">
+                        +{project.stack.length - 4} more
+                      </span>
+                    )}
                   </div>
 
                   {/* Dynamic Action Buttons */}
@@ -111,6 +163,7 @@ export default function Projects() {
                       <Link 
                         href={project.live} 
                         target="_blank" 
+                        onClick={(e) => e.stopPropagation()}
                         className="flex-1 min-w-[80px] px-2 py-2 bg-accent-cyan text-bg-primary font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-[0_0_12px_rgba(0,212,255,0.2)]"
                       >
                         <FaExternalLinkAlt size={10} />
@@ -121,6 +174,7 @@ export default function Projects() {
                       <Link 
                         href={project.githubClient} 
                         target="_blank" 
+                        onClick={(e) => e.stopPropagation()}
                         className="flex-1 min-w-[80px] px-2 py-2 bg-white/5 text-text-primary hover:text-accent-cyan font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:bg-white/10 transition-all border border-white/10"
                       >
                         <FaGithub size={12} />
@@ -131,6 +185,7 @@ export default function Projects() {
                       <Link 
                         href={project.githubServer} 
                         target="_blank" 
+                        onClick={(e) => e.stopPropagation()}
                         className="flex-1 min-w-[80px] px-2 py-2 bg-white/5 text-text-primary hover:text-accent-cyan font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:bg-white/10 transition-all border border-white/10"
                       >
                         <FaGithub size={12} />
@@ -147,6 +202,16 @@ export default function Projects() {
           ))}
         </div>
       </div>
+
+      {/* Project details Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }
