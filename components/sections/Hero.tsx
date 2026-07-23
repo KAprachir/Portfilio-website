@@ -141,12 +141,12 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      <div ref={contentRef} className="max-w-6xl mx-auto px-6 w-full z-10">
+      <div ref={contentRef} className="max-w-4xl mx-auto px-6 w-full z-10 text-center flex flex-col items-center">
         <motion.p
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="font-mono text-accent-cyan text-lg mb-4 flex items-center gap-2"
+          className="font-mono text-accent-cyan text-lg mb-4 flex items-center justify-center gap-2"
         >
           <motion.span
             animate={{ rotate: [0, 14, -8, 14, -4, 10, 0, 0] }}
@@ -167,7 +167,7 @@ export default function Hero() {
           I'm <CharacterReveal text={heroData.title} />
         </h1>
 
-        <div className="h-12 mb-8">
+        <div className="h-12 mb-8 flex items-center justify-center">
           <p className="text-2xl md:text-4xl font-mono text-text-primary">
             {displayText}
             <span className="animate-pulse text-accent-cyan ml-1">|</span>
@@ -178,12 +178,12 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="text-text-muted text-lg md:text-xl max-w-2xl mb-12 animate-fade-in"
+          className="text-text-muted text-lg md:text-xl max-w-2xl mx-auto mb-12 animate-fade-in text-center"
         >
           {heroData.subtitle}
         </motion.p>
 
-        <div className="flex flex-wrap gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-6">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
