@@ -20,7 +20,7 @@ export default function About() {
       "Currently in my final year, open to web development opportunities."
     ],
     philosophy: "Code is more than just instructions; it is an art form of logic, strategy, and business efficiency. I believe in clean architectures, readable systems, and building products that solve real-world problems.",
-    focus: "Deep diving into Next.js 14 App Router, full-stack MERN architectures, and Technical Product Management. Outside of coding, I enjoy playing sports (cricket & table tennis), reading strategy books, and exploring emerging AI tools.",
+    focus: "Currently in my final semester of BBA in Management Information Systems, sharpening my full-stack skills with Next.js, TypeScript, and AI integration. Actively building production-grade projects, seeking a web development internship for October–December 2026, and working toward becoming a Technical Product Manager in the long run.",
     yearsExp: "02+",
     projectsDone: "15+",
     techTools: "10+"
