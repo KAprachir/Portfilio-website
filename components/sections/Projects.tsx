@@ -158,7 +158,7 @@ export default function Projects() {
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
                 
                 {/* Quick Details indicator */}
-                <div className="absolute top-3 right-3 p-1.5 bg-black/60 text-accent-cyan rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                <div className="absolute top-3 right-3 p-1.5 bg-black/60 text-accent-cyan rounded-full opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                   <Info size={14} />
                 </div>
               </div>

@@ -163,12 +163,12 @@ export default function Hero() {
           <span>Hello World</span>
         </motion.p>
         
-        <h1 className="text-6xl md:text-8xl font-bold font-mono mb-6 leading-tight">
+        <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold font-mono mb-6 leading-tight">
           I'm <CharacterReveal text={heroData.title} />
         </h1>
 
-        <div className="h-12 mb-8 flex items-center justify-center">
-          <p className="text-2xl md:text-4xl font-mono text-text-primary">
+        <div className="min-h-[3rem] h-auto mb-8 flex items-center justify-center">
+          <p className="text-lg sm:text-2xl md:text-4xl font-mono text-text-primary text-center">
             {displayText}
             <span className="animate-pulse text-accent-cyan ml-1">|</span>
           </p>

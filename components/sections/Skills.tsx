@@ -128,7 +128,7 @@ export default function Skills() {
               </div>
 
               {/* Category Cards Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6">
                 {category.skills.map((skill, skillIndex) => {
                   const Icon = skill.iconComponent;
                   return (
@@ -139,7 +139,7 @@ export default function Skills() {
                       viewport={{ once: true }}
                       whileHover={{ y: -5, scale: 1.02 }}
                       transition={{ duration: 0.2, delay: (catIndex * 0.05) + (skillIndex * 0.03) }}
-                      className="bg-bg-surface border border-border hover:border-accent-cyan/60 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 text-center group shadow-xl transition-all cursor-pointer"
+                      className="bg-bg-surface border border-border hover:border-accent-cyan/60 rounded-2xl p-4 sm:p-6 flex flex-col items-center justify-center gap-3 sm:gap-4 text-center group shadow-xl transition-all cursor-pointer"
                     >
                       {Icon ? (
                         <Icon className="text-accent-cyan group-hover:scale-110 transition-transform duration-300" size={34} />
