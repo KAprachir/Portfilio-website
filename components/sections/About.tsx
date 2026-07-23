@@ -14,7 +14,11 @@ export default function About() {
 
   const [aboutData, setAboutData] = useState({
     aboutTitle: "About Me",
-    aboutBio: "I am a full-stack engineer and final-year MIS student with a passion for building high-performance, scalable web applications. My approach combines technical precision with product strategy and user-centric design. I thrive in environments that challenge my problem-solving skills and allow me to push the boundaries of modern digital experiences.",
+    aboutBio: [
+      "I'm <strong>Khairul Alam Prachir</strong>, a full-stack web developer from Bangladesh specializing in Next.js, TypeScript, React, Node.js, and MongoDB. I build production-ready web applications that are fast, scalable, and solve real problems — from AI-powered travel platforms to internship marketplaces with smart matching algorithms.",
+      "My background in Management Information Systems gives me an edge — I think like a developer and a business analyst at the same time, which means the products I build actually make sense for the people using them.",
+      "Currently in my final year, open to web development opportunities."
+    ],
     philosophy: "Code is more than just instructions; it is an art form of logic, strategy, and business efficiency. I believe in clean architectures, readable systems, and building products that solve real-world problems.",
     focus: "Deep diving into Next.js 14 App Router, full-stack MERN architectures, and Technical Product Management. Outside of coding, I enjoy playing sports (cricket & table tennis), reading strategy books, and exploring emerging AI tools.",
     yearsExp: "02+",
@@ -29,14 +33,11 @@ export default function About() {
         return res.json();
       })
       .then(data => {
-        if (data) {
-          if (data.aboutBio && Array.isArray(data.aboutBio) && data.aboutBio.length > 0) {
-            const joinedText = data.aboutBio.map((p: string) => p.replace(/<[^>]*>?/gm, '')).join(" ");
-            setAboutData(prev => ({
-              ...prev,
-              aboutBio: joinedText || prev.aboutBio
-            }));
-          }
+        if (data && data.aboutBio && Array.isArray(data.aboutBio) && data.aboutBio.length > 0) {
+          setAboutData(prev => ({
+            ...prev,
+            aboutBio: data.aboutBio
+          }));
         }
       })
       .catch(() => {
@@ -84,11 +85,13 @@ export default function About() {
               </div>
             </div>
 
-            {/* Bio Paragraph */}
+            {/* Bio Paragraphs */}
             <div className="md:col-span-8 space-y-4">
-              <p className="text-text-muted text-base md:text-lg leading-relaxed font-sans">
-                {aboutData.aboutBio}
-              </p>
+              <div className="text-text-muted text-base md:text-lg leading-relaxed font-sans space-y-4">
+                {aboutData.aboutBio.map((paragraph, index) => (
+                  <p key={index} dangerouslySetInnerHTML={{ __html: paragraph }} />
+                ))}
+              </div>
 
               {/* Stats Counters */}
               <div className="grid grid-cols-3 gap-6 pt-6 border-t border-border/50">
