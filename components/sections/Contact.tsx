@@ -88,7 +88,7 @@ export default function Contact() {
               </motion.div>
 
               <motion.a
-                href="tel:+8801700000000"
+                href="tel:+8801863674523"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -100,7 +100,7 @@ export default function Contact() {
                 </div>
                 <div className="overflow-hidden">
                   <p className="text-xs text-text-muted font-mono mb-0.5">Phone / WhatsApp</p>
-                  <p className="text-sm font-medium truncate">+880 1784-821652</p>
+                  <p className="text-sm font-medium truncate">+880 1863-674523</p>
                 </div>
               </motion.a>
             </div>
