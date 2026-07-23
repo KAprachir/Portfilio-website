@@ -73,11 +73,14 @@ export default function Qualifications() {
           {
             _id: "ex2",
             type: "Experience",
-            title: "Self-taught Developer",
-            subtitle: "React, Next.js, Node.js",
-            duration: "2022–Present",
-            details: ["Built several full-stack projects using modern web technologies and best practices."],
-            tags: ["Next.js", "Framer Motion", "State Management"]
+            title: "Independent Full Stack Developer (Fresher)",
+            subtitle: "React, Next.js, Node.js, MongoDB",
+            duration: "2023–Present",
+            details: [
+              "Motivated entry-level developer seeking junior/intern roles.",
+              "Built production-ready web platforms including AI OCR travel copilots, recruiter ATS portals, and recipe platforms."
+            ],
+            tags: ["Fresher", "Next.js", "Full Stack", "Entry-Level"]
           }
         ];
         setQualifications(fallbackQuals);

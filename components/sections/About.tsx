@@ -96,15 +96,15 @@ export default function About() {
               {/* Stats Counters */}
               <div className="grid grid-cols-3 gap-6 pt-6 border-t border-border/50">
                 <div>
-                  <p className="text-3xl md:text-4xl font-bold font-mono text-accent-cyan">{aboutData.yearsExp}</p>
-                  <p className="text-xs font-mono text-text-muted mt-1 uppercase tracking-wider">Years Exp.</p>
+                  <p className="text-2xl md:text-3xl font-bold font-mono text-accent-cyan">Fresher</p>
+                  <p className="text-xs font-mono text-text-muted mt-1 uppercase tracking-wider">Experience</p>
                 </div>
                 <div>
-                  <p className="text-3xl md:text-4xl font-bold font-mono text-accent-cyan">{aboutData.projectsDone}</p>
-                  <p className="text-xs font-mono text-text-muted mt-1 uppercase tracking-wider">Projects Done</p>
+                  <p className="text-3xl md:text-4xl font-bold font-mono text-accent-cyan">15+</p>
+                  <p className="text-xs font-mono text-text-muted mt-1 uppercase tracking-wider">Projects Built</p>
                 </div>
                 <div>
-                  <p className="text-3xl md:text-4xl font-bold font-mono text-accent-cyan">{aboutData.techTools}</p>
+                  <p className="text-3xl md:text-4xl font-bold font-mono text-accent-cyan">10+</p>
                   <p className="text-xs font-mono text-text-muted mt-1 uppercase tracking-wider">Core Tools</p>
                 </div>
               </div>
