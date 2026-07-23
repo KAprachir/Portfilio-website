@@ -695,7 +695,7 @@ export default function AdminPage() {
                 placeholder="admin"
                 required
                 disabled={isLoggingIn}
-                className="w-full bg-bg-surface border border-border py-3 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors font-mono text-sm disabled:opacity-50"
+                className="w-full bg-bg-primary/60 border border-border py-3 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors font-mono text-sm disabled:opacity-50"
               />
             </div>
 
@@ -708,7 +708,7 @@ export default function AdminPage() {
                 placeholder="••••••••"
                 required
                 disabled={isLoggingIn}
-                className="w-full bg-bg-surface border border-border py-3 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors font-mono text-sm disabled:opacity-50"
+                className="w-full bg-bg-primary/60 border border-border py-3 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors font-mono text-sm disabled:opacity-50"
               />
             </div>
 
@@ -807,7 +807,7 @@ export default function AdminPage() {
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-bg-surface border border-border rounded-xl p-6 md:p-8 space-y-6"
+              className="bg-bg-primary/60 border border-border rounded-xl p-6 md:p-8 space-y-6"
             >
               <div className="border-b border-border/40 pb-4">
                 <h3 className="text-xl font-bold font-mono text-accent-cyan">Edit Hero Data</h3>
@@ -833,7 +833,7 @@ export default function AdminPage() {
                     value={heroData.title}
                     onChange={(e) => setHeroData({ ...heroData, title: e.target.value })}
                     required
-                    className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors"
+                    className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors"
                   />
                 </div>
 
@@ -845,7 +845,7 @@ export default function AdminPage() {
                     onChange={(e) => setTypingTextString(e.target.value)}
                     placeholder="e.g. Web Developer, MIS Student, Technical Manager"
                     required
-                    className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors"
+                    className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors"
                   />
                 </div>
 
@@ -856,7 +856,7 @@ export default function AdminPage() {
                     value={heroData.subtitle}
                     onChange={(e) => setHeroData({ ...heroData, subtitle: e.target.value })}
                     required
-                    className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors resize-none text-sm leading-relaxed"
+                    className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors resize-none text-sm leading-relaxed"
                   />
                 </div>
 
@@ -866,7 +866,7 @@ export default function AdminPage() {
                     type="text"
                     value={heroData.resumeUrl}
                     onChange={(e) => setHeroData({ ...heroData, resumeUrl: e.target.value })}
-                    className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors font-mono text-sm"
+                    className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors font-mono text-sm"
                   />
                 </div>
 
@@ -881,7 +881,7 @@ export default function AdminPage() {
                       value={heroData.aboutTitle}
                       onChange={(e) => setHeroData({ ...heroData, aboutTitle: e.target.value })}
                       required
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors"
                     />
                   </div>
 
@@ -892,7 +892,7 @@ export default function AdminPage() {
                       value={aboutBioString}
                       onChange={(e) => setAboutBioString(e.target.value)}
                       required
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors leading-relaxed font-mono text-xs"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors leading-relaxed font-mono text-xs"
                     />
                   </div>
 
@@ -904,7 +904,7 @@ export default function AdminPage() {
                         value={heroData.aboutWhoami}
                         onChange={(e) => setHeroData({ ...heroData, aboutWhoami: e.target.value })}
                         required
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                       />
                     </div>
                     <div className="space-y-2">
@@ -914,7 +914,7 @@ export default function AdminPage() {
                         value={heroData.aboutLocation}
                         onChange={(e) => setHeroData({ ...heroData, aboutLocation: e.target.value })}
                         required
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                       />
                     </div>
                     <div className="space-y-2">
@@ -924,7 +924,7 @@ export default function AdminPage() {
                         value={heroData.aboutStatus}
                         onChange={(e) => setHeroData({ ...heroData, aboutStatus: e.target.value })}
                         required
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                       />
                     </div>
                     <div className="space-y-2">
@@ -934,7 +934,7 @@ export default function AdminPage() {
                         value={heroData.aboutGoal}
                         onChange={(e) => setHeroData({ ...heroData, aboutGoal: e.target.value })}
                         required
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                       />
                     </div>
                   </div>
@@ -960,7 +960,7 @@ export default function AdminPage() {
               className="grid grid-cols-1 lg:grid-cols-3 gap-8"
             >
               {/* Form to Add Skill */}
-              <div className="bg-bg-surface border border-border rounded-xl p-6 h-fit space-y-6 lg:col-span-1">
+              <div className="bg-bg-primary/60 border border-border rounded-xl p-6 h-fit space-y-6 lg:col-span-1">
                 <div className="border-b border-border/40 pb-4">
                   <h3 className="text-xl font-bold font-mono text-accent-cyan">Add Skill</h3>
                   <p className="text-xs text-text-muted font-mono">Insert a new tool or language into your tech stack grid.</p>
@@ -981,7 +981,7 @@ export default function AdminPage() {
                     <select
                       value={newSkill.category}
                       onChange={(e) => setNewSkill({ ...newSkill, category: e.target.value })}
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                     >
                       <option value="Frontend">Frontend</option>
                       <option value="Backend">Backend</option>
@@ -998,7 +998,7 @@ export default function AdminPage() {
                       onChange={(e) => setNewSkill({ ...newSkill, name: e.target.value })}
                       placeholder="React"
                       required
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                     />
                   </div>
 
@@ -1010,7 +1010,7 @@ export default function AdminPage() {
                       onChange={(e) => setNewSkill({ ...newSkill, icon: e.target.value })}
                       placeholder="FaReact"
                       required
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors font-mono text-xs"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors font-mono text-xs"
                     />
                   </div>
 
@@ -1026,7 +1026,7 @@ export default function AdminPage() {
               </div>
 
               {/* Skills Listing grouped by category */}
-              <div className="bg-bg-surface border border-border rounded-xl p-6 lg:col-span-2 space-y-6">
+              <div className="bg-bg-primary/60 border border-border rounded-xl p-6 lg:col-span-2 space-y-6">
                 <div className="border-b border-border/40 pb-4">
                   <h3 className="text-xl font-bold font-mono text-accent-cyan">Current Tech Stack</h3>
                   <p className="text-xs text-text-muted font-mono">Review or delete existing skills grouped by their dashboard rows.</p>
@@ -1048,7 +1048,7 @@ export default function AdminPage() {
                             {group.map((skill) => (
                               <div
                                 key={skill._id}
-                                className="flex items-center justify-between p-3 rounded-lg bg-bg-surface border border-border hover:border-accent-cyan/30 transition-all group"
+                                className="flex items-center justify-between p-3 rounded-lg bg-bg-primary/60 border border-border hover:border-accent-cyan/30 transition-all group"
                               >
                                 <div className="flex items-center gap-3">
                                   <span className="font-mono text-xs text-accent-cyan">{skill.icon}</span>
@@ -1080,7 +1080,7 @@ export default function AdminPage() {
               className="space-y-8"
             >
               {/* Form to Create/Edit Project */}
-              <div className="bg-bg-surface border border-border rounded-xl p-6 md:p-8 space-y-6">
+              <div className="bg-bg-primary/60 border border-border rounded-xl p-6 md:p-8 space-y-6">
                 <div className="border-b border-border/40 pb-4 flex justify-between items-center">
                   <div>
                     <h3 className="text-xl font-bold font-mono text-accent-cyan">
@@ -1132,7 +1132,7 @@ export default function AdminPage() {
                         onChange={(e) => setProjectForm({ ...projectForm, title: e.target.value })}
                         placeholder="RecipeHub"
                         required
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors"
                       />
                     </div>
                     <div className="space-y-2">
@@ -1143,7 +1143,7 @@ export default function AdminPage() {
                         onChange={(e) => setProjectForm({ ...projectForm, image: e.target.value })}
                         placeholder="/RecipeHub Picture.png"
                         required
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm font-mono"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm font-mono"
                       />
                     </div>
                   </div>
@@ -1156,7 +1156,7 @@ export default function AdminPage() {
                       onChange={(e) => setProjectForm({ ...projectForm, description: e.target.value })}
                       placeholder="A short overview of the project that displays on the grid card."
                       required
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                     />
                   </div>
 
@@ -1167,7 +1167,7 @@ export default function AdminPage() {
                       value={projectForm.longDescription}
                       onChange={(e) => setProjectForm({ ...projectForm, longDescription: e.target.value })}
                       placeholder="A comprehensive breakdown of the application scope, databases, and purpose."
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm leading-relaxed"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm leading-relaxed"
                     />
                   </div>
 
@@ -1179,7 +1179,7 @@ export default function AdminPage() {
                         value={projectForm.featuresString}
                         onChange={(e) => setProjectForm({ ...projectForm, featuresString: e.target.value })}
                         placeholder="Role-based access controls&#10;Stripe Checkout payments&#10;Dynamic filters"
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm leading-relaxed font-mono"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm leading-relaxed font-mono"
                       />
                     </div>
                     <div className="space-y-2">
@@ -1189,7 +1189,7 @@ export default function AdminPage() {
                         value={projectForm.stackString}
                         onChange={(e) => setProjectForm({ ...projectForm, stackString: e.target.value })}
                         placeholder="Next.js, Tailwind CSS, MongoDB, Node.js"
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm leading-relaxed font-mono"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm leading-relaxed font-mono"
                       />
                     </div>
                   </div>
@@ -1202,7 +1202,7 @@ export default function AdminPage() {
                         value={projectForm.challengesString}
                         onChange={(e) => setProjectForm({ ...projectForm, challengesString: e.target.value })}
                         placeholder="Handling Stripe webhook event race conditions&#10;Structuring MongoDB aggregations for real-time filters"
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm leading-relaxed font-mono"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm leading-relaxed font-mono"
                       />
                     </div>
                     <div className="space-y-2">
@@ -1212,7 +1212,7 @@ export default function AdminPage() {
                         value={projectForm.futurePlansString}
                         onChange={(e) => setProjectForm({ ...projectForm, futurePlansString: e.target.value })}
                         placeholder="Implement AI meal plan generator&#10;Add live video cooking rooms"
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm leading-relaxed font-mono"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm leading-relaxed font-mono"
                       />
                     </div>
                   </div>
@@ -1225,7 +1225,7 @@ export default function AdminPage() {
                         value={projectForm.live}
                         onChange={(e) => setProjectForm({ ...projectForm, live: e.target.value })}
                         placeholder="https://example.com"
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs font-mono"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs font-mono"
                       />
                     </div>
                     <div className="space-y-2">
@@ -1235,7 +1235,7 @@ export default function AdminPage() {
                         value={projectForm.githubClient}
                         onChange={(e) => setProjectForm({ ...projectForm, githubClient: e.target.value })}
                         placeholder="https://github.com/user/client"
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs font-mono"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs font-mono"
                       />
                     </div>
                     <div className="space-y-2">
@@ -1245,7 +1245,7 @@ export default function AdminPage() {
                         value={projectForm.githubServer}
                         onChange={(e) => setProjectForm({ ...projectForm, githubServer: e.target.value })}
                         placeholder="https://github.com/user/server"
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs font-mono"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs font-mono"
                       />
                     </div>
                   </div>
@@ -1262,7 +1262,7 @@ export default function AdminPage() {
               </div>
 
               {/* Projects Grid Listing */}
-              <div className="bg-bg-surface border border-border rounded-xl p-6 md:p-8 space-y-6">
+              <div className="bg-bg-primary/60 border border-border rounded-xl p-6 md:p-8 space-y-6">
                 <div className="border-b border-border/40 pb-4">
                   <h3 className="text-xl font-bold font-mono text-accent-cyan">Active Projects Showcase</h3>
                   <p className="text-xs text-text-muted font-mono">View, edit, or remove project cards currently rendered on the website.</p>
@@ -1272,7 +1272,7 @@ export default function AdminPage() {
                   {projects.map((project) => (
                     <div
                       key={project._id}
-                      className="border border-border rounded-xl overflow-hidden flex flex-col bg-bg-surface hover:border-accent-cyan/30 transition-colors"
+                      className="border border-border rounded-xl overflow-hidden flex flex-col bg-bg-primary/60 hover:border-accent-cyan/30 transition-colors"
                     >
                       <div className="aspect-video w-full overflow-hidden bg-border/20">
                         <img
@@ -1320,7 +1320,7 @@ export default function AdminPage() {
               className="grid grid-cols-1 lg:grid-cols-3 gap-8"
             >
               {/* Form to Add/Edit Timeline Item */}
-              <div className="bg-bg-surface border border-border rounded-xl p-6 h-fit space-y-6 lg:col-span-1">
+              <div className="bg-bg-primary/60 border border-border rounded-xl p-6 h-fit space-y-6 lg:col-span-1">
                 <div className="border-b border-border/40 pb-4">
                   <h3 className="text-xl font-bold font-mono text-accent-cyan">
                     {editingQualId ? "Edit Item" : "Add Timeline Item"}
@@ -1343,7 +1343,7 @@ export default function AdminPage() {
                     <select
                       value={qualForm.type}
                       onChange={(e) => setQualForm({ ...qualForm, type: e.target.value as any })}
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm text-text-primary"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm text-text-primary"
                     >
                       <option value="Education">Education</option>
                       <option value="Experience">Experience</option>
@@ -1358,7 +1358,7 @@ export default function AdminPage() {
                       onChange={(e) => setQualForm({ ...qualForm, title: e.target.value })}
                       required
                       placeholder="e.g. BBA in MIS"
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                     />
                   </div>
 
@@ -1370,7 +1370,7 @@ export default function AdminPage() {
                       onChange={(e) => setQualForm({ ...qualForm, subtitle: e.target.value })}
                       required
                       placeholder="e.g. Begum Rokeya University"
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                     />
                   </div>
 
@@ -1382,7 +1382,7 @@ export default function AdminPage() {
                       onChange={(e) => setQualForm({ ...qualForm, duration: e.target.value })}
                       required
                       placeholder="e.g. 2021–Present or 2024"
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                     />
                   </div>
 
@@ -1393,7 +1393,7 @@ export default function AdminPage() {
                       value={qualForm.detailsString}
                       onChange={(e) => setQualForm({ ...qualForm, detailsString: e.target.value })}
                       placeholder="Focusing on Database Management...&#10;Majoring in MIS..."
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs font-mono leading-relaxed"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs font-mono leading-relaxed"
                     />
                   </div>
 
@@ -1404,7 +1404,7 @@ export default function AdminPage() {
                       value={qualForm.tagsString}
                       onChange={(e) => setQualForm({ ...qualForm, tagsString: e.target.value })}
                       placeholder="MIS, Database Management"
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                     />
                   </div>
 
@@ -1415,7 +1415,7 @@ export default function AdminPage() {
                       value={qualForm.certUrl}
                       onChange={(e) => setQualForm({ ...qualForm, certUrl: e.target.value })}
                       placeholder="https://..."
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                     />
                   </div>
 
@@ -1453,7 +1453,7 @@ export default function AdminPage() {
               </div>
 
               {/* Qualifications timeline list */}
-              <div className="bg-bg-surface border border-border rounded-xl p-6 md:p-8 space-y-6 lg:col-span-2">
+              <div className="bg-bg-primary/60 border border-border rounded-xl p-6 md:p-8 space-y-6 lg:col-span-2">
                 <div className="border-b border-border/40 pb-4">
                   <h3 className="text-xl font-bold font-mono text-accent-cyan">Active Timeline Items</h3>
                   <p className="text-xs text-text-muted font-mono">Manage qualifications displaying on your home page timeline.</p>
@@ -1466,7 +1466,7 @@ export default function AdminPage() {
                     qualifications.map((qual) => (
                       <div
                         key={qual._id}
-                        className="border border-border rounded-xl p-4 bg-bg-surface hover:border-accent-cyan/20 transition-colors flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+                        className="border border-border rounded-xl p-4 bg-bg-primary/60 hover:border-accent-cyan/20 transition-colors flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
                       >
                         <div>
                           <div className="flex items-center gap-2">
@@ -1511,7 +1511,7 @@ export default function AdminPage() {
               className="grid grid-cols-1 lg:grid-cols-3 gap-8"
             >
               {/* Form to Write/Edit Article */}
-              <div className="bg-bg-surface border border-border rounded-xl p-6 h-fit space-y-6 lg:col-span-1">
+              <div className="bg-bg-primary/60 border border-border rounded-xl p-6 h-fit space-y-6 lg:col-span-1">
                 <div className="border-b border-border/40 pb-4">
                   <h3 className="text-xl font-bold font-mono text-accent-cyan">
                     {editingPostId ? "Edit Article" : "Write Article"}
@@ -1541,7 +1541,7 @@ export default function AdminPage() {
                       }}
                       required
                       placeholder="e.g. Bridging MIS and Web Development"
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                     />
                   </div>
 
@@ -1553,7 +1553,7 @@ export default function AdminPage() {
                       onChange={(e) => setPostForm({ ...postForm, slug: e.target.value })}
                       required
                       placeholder="e.g. bridging-mis-and-web-development"
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm font-mono text-accent-cyan"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm font-mono text-accent-cyan"
                     />
                   </div>
 
@@ -1565,7 +1565,7 @@ export default function AdminPage() {
                       onChange={(e) => setPostForm({ ...postForm, summary: e.target.value })}
                       required
                       placeholder="Summarize the core premise of your article..."
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs leading-relaxed"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs leading-relaxed"
                     />
                   </div>
 
@@ -1577,7 +1577,7 @@ export default function AdminPage() {
                         value={postForm.readTime}
                         onChange={(e) => setPostForm({ ...postForm, readTime: e.target.value })}
                         placeholder="e.g. 5 min read"
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                       />
                     </div>
                     <div className="space-y-2">
@@ -1587,7 +1587,7 @@ export default function AdminPage() {
                         value={postForm.tagsString}
                         onChange={(e) => setPostForm({ ...postForm, tagsString: e.target.value })}
                         placeholder="MIS, Engineering"
-                        className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm"
                       />
                     </div>
                   </div>
@@ -1600,7 +1600,7 @@ export default function AdminPage() {
                       onChange={(e) => setPostForm({ ...postForm, content: e.target.value })}
                       required
                       placeholder="Write your article content here..."
-                      className="w-full bg-bg-surface border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs font-mono leading-relaxed"
+                      className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-xs font-mono leading-relaxed"
                     />
                   </div>
 
@@ -1610,7 +1610,7 @@ export default function AdminPage() {
                       id="isPublished"
                       checked={postForm.isPublished}
                       onChange={(e) => setPostForm({ ...postForm, isPublished: e.target.checked })}
-                      className="w-4 h-4 rounded accent-accent-cyan bg-bg-surface border border-border focus:ring-0 focus:outline-none cursor-pointer"
+                      className="w-4 h-4 rounded accent-accent-cyan bg-bg-primary/60 border border-border focus:ring-0 focus:outline-none cursor-pointer"
                     />
                     <label htmlFor="isPublished" className="text-xs font-mono text-text-primary cursor-pointer select-none">
                       Publish Immediately (Draft if unchecked)
