@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, DM_Sans } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
-import CustomCursor from "@/components/ui/CustomCursor";
 import PageLoader from "@/components/ui/PageLoader";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -44,7 +43,6 @@ export default function RootLayout({
     <html lang="en" className="light scroll-smooth">
       <body className={`${jetbrainsMono.variable} ${dmSans.variable} font-sans antialiased bg-bg-primary text-text-primary`}>
         <LenisProvider>
-          <CustomCursor />
           {children}
         </LenisProvider>
       </body>
