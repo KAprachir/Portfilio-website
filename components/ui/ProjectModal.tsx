@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { X, ExternalLink, CheckSquare, Settings, AlertTriangle, Rocket } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLenis } from "lenis/react";
 
 interface Project {
@@ -29,12 +29,18 @@ interface ProjectModalProps {
 
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   const lenis = useLenis();
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   // Pause background Lenis smooth scroll and prevent body scroll when modal is open
   useEffect(() => {
     lenis?.stop();
     document.body.style.overflow = "hidden";
     
+    // Focus body container for keyboard scroll support
+    if (bodyRef.current) {
+      bodyRef.current.focus();
+    }
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
@@ -46,6 +52,14 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [lenis, onClose]);
+
+  // Forward mouse wheel scrolling directly to modal content container
+  const handleWheel = (e: React.WheelEvent) => {
+    e.stopPropagation();
+    if (bodyRef.current) {
+      bodyRef.current.scrollTop += e.deltaY;
+    }
+  };
 
   return (
     <motion.div
@@ -64,6 +78,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
         data-lenis-prevent
         data-lenis-prevent-touch
+        onWheel={handleWheel}
         className="bg-bg-surface border border-border w-full max-w-3xl rounded-2xl overflow-hidden relative shadow-2xl flex flex-col my-auto max-h-[85vh] text-text-primary"
         onClick={(e) => e.stopPropagation()}
       >
@@ -87,7 +102,9 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
         {/* Content Body */}
         <div 
-          className="p-6 md:p-8 overflow-y-auto space-y-8 flex-1"
+          ref={bodyRef}
+          tabIndex={0}
+          className="p-6 md:p-8 overflow-y-auto space-y-8 flex-1 outline-none"
           data-lenis-prevent
           data-lenis-prevent-touch
         >
