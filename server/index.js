@@ -107,58 +107,120 @@ async function seedDatabase() {
       console.log("Default Skills data seeded.");
     }
 
-    // 4. Seed Projects
-    const projectCount = await Project.countDocuments();
-    if (projectCount === 0) {
-      const defaultProjects = [
-        {
-          title: "RecipeHub",
-          description: "A full-stack recipe sharing platform where food enthusiasts can create, discover, and manage recipes. Features role-based access control, premium memberships, and moderation tools.",
-          longDescription: "RecipeHub is a full-stack recipe sharing platform built for food enthusiasts. Free users can post up to 2 recipes, while upgrading to a premium membership via Stripe unlocks unlimited publishing. The platform implements secure session-based authentication using Better Auth, and integrates robust admin moderation utilities to manage offensive or copyrighted content.",
-          features: [
-            "Role-based access (User vs Admin) & recipe moderation",
-            "Stripe-integrated subscriptions for unlimited recipe publishing",
-            "Dynamic MongoDB filtering by category, pagination, and real-time likes/favorites"
-          ],
-          stack: ["Next.js", "Tailwind CSS", "HeroUI", "Framer Motion", "Node.js", "Express.js", "MongoDB", "Better Auth", "Stripe"],
-          githubClient: "https://github.com/KAprachir/recipehub-client",
-          githubServer: "https://github.com/KAprachir/recipehub-server",
-          live: "https://recipehub-client-kappa.vercel.app",
-          image: "/RecipeHub Picture.png"
-        },
-        {
-          title: "HireLoop",
-          description: "A premium career portal designed to bridge the gap between job seekers and employers. Features a custom candidate pipeline, recruiter analytics, and subscription tiers.",
-          longDescription: "HireLoop is a premium career portal designed to bridge the gap between job seekers, recruiters, and platform administrators. Recruiters can purchase subscription tiers to unlock recruiter capabilities, post jobs, and manage candidates. Job seekers can build their profiles, apply to jobs, and track their application progress through a dedicated applicant tracking pipeline.",
-          features: [
-            "Three roles: Seeker, Recruiter, and Admin, each with unique dashboards",
-            "Custom Applicant Tracking System (ATS) pipeline workflow",
-            "Subscription analytics dashboard and Stripe payment integration"
-          ],
-          stack: ["Next.js", "Tailwind CSS", "HeroUI", "Motion", "Node.js", "Express.js", "MongoDB", "Better Auth", "Stripe"],
-          githubClient: "https://github.com/KAprachir/HireLoop-Client",
-          githubServer: "https://github.com/KAprachir/HireLoop-Server",
-          live: "https://hire-loop-client-eta.vercel.app",
-          image: "/Hireloop picture.png"
-        },
-        {
-          title: "IdeaVault",
-          description: "A collaborative platform where entrepreneurs and innovators share, discover, and validate startup ideas through community engagement and peer feedback.",
-          longDescription: "IdeaVault is a collaborative workspace where developers and startup founders can pitch, share, and validate business ideas. It features a complete community discussion system, interactive search features, and instant category filters to streamline idea exploration.",
-          features: [
-            "Nested comment system with full CRUD interactive features",
-            "Stateless JWT authentication and Google OAuth 2.0 login",
-            "Real-time client-side keyword search and instant category filter"
-          ],
-          stack: ["Next.js", "Tailwind CSS", "Node.js", "Express.js", "MongoDB", "JWT", "Bcrypt"],
-          githubClient: "https://github.com/KAprachir/assignment-9-client",
-          live: "https://assignment-9-client-prachir.vercel.app",
-          image: "/IdeaVault picture.png"
+    // 4. Seed / Sync Projects
+    const defaultProjects = [
+      {
+        title: "RecipeHub",
+        description: "A full-stack recipe sharing platform where food enthusiasts can create, discover, and manage recipes. Features role-based access control, premium memberships, and moderation tools.",
+        longDescription: "RecipeHub is a full-stack recipe sharing platform built for food enthusiasts. Free users can post up to 2 recipes, while upgrading to a premium membership via Stripe unlocks unlimited publishing. The platform implements secure session-based authentication using Better Auth, and integrates robust admin moderation utilities to manage offensive or copyrighted content.",
+        features: [
+          "Role-based access (User vs Admin) & recipe moderation",
+          "Stripe-integrated subscriptions for unlimited recipe publishing",
+          "Dynamic MongoDB filtering by category, pagination, and real-time likes/favorites"
+        ],
+        technicalDetails: [
+          "Secured with Better Auth supporting both Credentials and Google OAuth 2.0 logins",
+          "Stripe Checkout API integration with secure server-side webhook validations",
+          "Robust Admin Panel with user management, recipe moderation, and reports handling",
+          "Optimized MongoDB aggregations for dynamic filtering, sorting, and pagination"
+        ],
+        challenges: [
+          "Handling Stripe webhook event race conditions during asynchronous subscription state updates.",
+          "Structuring complex MongoDB aggregations for multi-field search, pagination, and real-time like/favorite counts simultaneously."
+        ],
+        futurePlans: [
+          "Implement an AI-powered meal plan generator tailored to user dietary goals.",
+          "Add live video cooking rooms with interactive real-time Q&A."
+        ],
+        stack: ["Next.js", "Tailwind CSS", "HeroUI", "Framer Motion", "Node.js", "Express.js", "MongoDB", "Better Auth", "Stripe"],
+        githubClient: "https://github.com/KAprachir/recipehub-client",
+        githubServer: "https://github.com/KAprachir/recipehub-server",
+        live: "https://recipehub-client-kappa.vercel.app",
+        image: "/RecipeHub Picture.png"
+      },
+      {
+        title: "HireLoop",
+        description: "A premium career portal designed to bridge the gap between job seekers and employers. Features a custom candidate pipeline, recruiter analytics, and subscription tiers.",
+        longDescription: "HireLoop is a premium career portal designed to bridge the gap between job seekers, recruiters, and platform administrators. Recruiters can purchase subscription tiers to unlock recruiter capabilities, post jobs, and manage candidates. Job seekers can build their profiles, apply to jobs, and track their application progress through a dedicated applicant tracking pipeline.",
+        features: [
+          "Three roles: Seeker, Recruiter, and Admin, each with unique dashboards",
+          "Custom Applicant Tracking System (ATS) pipeline workflow",
+          "Subscription analytics dashboard and Stripe payment integration"
+        ],
+        technicalDetails: [
+          "Custom Applicant Tracking System (ATS) pipeline workflow supporting state transitions",
+          "Role-based multi-dashboard architecture with granular routing guards",
+          "Stripe subscriptions integration for recruiter account upgrades",
+          "Smart keyword searches matching candidates based on skill criteria"
+        ],
+        challenges: [
+          "Designing a granular multi-role routing guard architecture (Seeker vs Recruiter vs Admin) while keeping client-side navigation fast.",
+          "Managing complex state transitions in the applicant pipeline to prevent illegal status leaps."
+        ],
+        futurePlans: [
+          "Integrate automated AI resume keyword matching & candidate scoring against job requirements.",
+          "Add automated interview scheduling synced with Google Calendar API."
+        ],
+        stack: ["Next.js", "Tailwind CSS", "HeroUI", "Motion", "Node.js", "Express.js", "MongoDB", "Better Auth", "Stripe"],
+        githubClient: "https://github.com/KAprachir/HireLoop-Client",
+        githubServer: "https://github.com/KAprachir/HireLoop-Server",
+        live: "https://hire-loop-client-eta.vercel.app",
+        image: "/Hireloop picture.png"
+      },
+      {
+        title: "IdeaVault",
+        description: "A collaborative platform where entrepreneurs and innovators share, discover, and validate startup ideas through community engagement and peer feedback.",
+        longDescription: "IdeaVault is a collaborative workspace where developers and startup founders can pitch, share, and validate business ideas. It features a complete community discussion system, interactive search features, and instant category filters to streamline idea exploration.",
+        features: [
+          "Nested comment system with full CRUD interactive features",
+          "Stateless JWT authentication and Google OAuth 2.0 login",
+          "Real-time client-side keyword search and instant category filter"
+        ],
+        technicalDetails: [
+          "Stateless JWT-based user authentication combined with Google OAuth 2.0 flows",
+          "Nested comment systems supporting recursive CRUD operations",
+          "Client-side real-time fuzzy search and instant category filter indexing",
+          "Persistent state theme manager synced with browser localStorage"
+        ],
+        challenges: [
+          "Designing performant recursive schema queries in MongoDB for multi-level nested comment threads.",
+          "Building a client-side fuzzy search filter without causing re-render lag on large idea lists."
+        ],
+        futurePlans: [
+          "Add real-time WebSockets live chat between startup founders and early-stage investors.",
+          "Build an automated investor pitch deck builder with one-click PDF export."
+        ],
+        stack: ["Next.js", "Tailwind CSS", "Node.js", "Express.js", "MongoDB", "JWT", "Bcrypt"],
+        githubClient: "https://github.com/KAprachir/assignment-9-client",
+        live: "https://assignment-9-client-prachir.vercel.app",
+        image: "/IdeaVault picture.png"
+      }
+    ];
+
+    for (const p of defaultProjects) {
+      const existing = await Project.findOne({ title: p.title });
+      if (!existing) {
+        await Project.create(p);
+      } else {
+        let updated = false;
+        if (!existing.challenges || existing.challenges.length === 0) {
+          existing.challenges = p.challenges;
+          updated = true;
         }
-      ];
-      await Project.insertMany(defaultProjects);
-      console.log("Default Projects data seeded.");
+        if (!existing.futurePlans || existing.futurePlans.length === 0) {
+          existing.futurePlans = p.futurePlans;
+          updated = true;
+        }
+        if (!existing.technicalDetails || existing.technicalDetails.length === 0) {
+          existing.technicalDetails = p.technicalDetails;
+          updated = true;
+        }
+        if (updated) {
+          await existing.save();
+        }
+      }
     }
+    console.log("Projects data synchronized successfully.");
 
     // 5. Seed Qualifications
     const qualCount = await Qualification.countDocuments();
@@ -376,12 +438,12 @@ app.delete('/api/skills/:id', authenticateJWT, async (req, res) => {
 // Add Project
 app.post('/api/projects', authenticateJWT, async (req, res) => {
   try {
-    const { title, description, longDescription, features, stack, githubClient, githubServer, live, image } = req.body;
+    const { title, description, longDescription, features, technicalDetails, challenges, futurePlans, stack, githubClient, githubServer, live, image } = req.body;
     if (!title || !description || !image) {
       return res.status(400).json({ error: "Title, description, and image URL are required" });
     }
     const project = await Project.create({
-      title, description, longDescription, features, stack, githubClient, githubServer, live, image
+      title, description, longDescription, features, technicalDetails, challenges, futurePlans, stack, githubClient, githubServer, live, image
     });
     res.status(201).json(project);
   } catch (error) {
@@ -393,9 +455,9 @@ app.post('/api/projects', authenticateJWT, async (req, res) => {
 app.put('/api/projects/:id', authenticateJWT, async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, longDescription, features, stack, githubClient, githubServer, live, image } = req.body;
+    const { title, description, longDescription, features, technicalDetails, challenges, futurePlans, stack, githubClient, githubServer, live, image } = req.body;
     const project = await Project.findByIdAndUpdate(id, {
-      title, description, longDescription, features, stack, githubClient, githubServer, live, image
+      title, description, longDescription, features, technicalDetails, challenges, futurePlans, stack, githubClient, githubServer, live, image
     }, { new: true });
     res.json(project);
   } catch (error) {

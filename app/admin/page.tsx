@@ -50,6 +50,7 @@ export default function AdminPage() {
     description: "",
     longDescription: "",
     featuresString: "",
+    technicalDetailsString: "",
     stackString: "",
     challengesString: "",
     futurePlansString: "",
@@ -314,6 +315,7 @@ export default function AdminPage() {
       description: projectForm.description,
       longDescription: projectForm.longDescription,
       features: projectForm.featuresString.split("\n").map(f => f.trim()).filter(Boolean),
+      technicalDetails: projectForm.technicalDetailsString.split("\n").map(t => t.trim()).filter(Boolean),
       stack: projectForm.stackString.split(",").map(s => s.trim()).filter(Boolean),
       challenges: projectForm.challengesString.split("\n").map(c => c.trim()).filter(Boolean),
       futurePlans: projectForm.futurePlansString.split("\n").map(p => p.trim()).filter(Boolean),
@@ -356,6 +358,7 @@ export default function AdminPage() {
           description: "",
           longDescription: "",
           featuresString: "",
+          technicalDetailsString: "",
           stackString: "",
           challengesString: "",
           futurePlansString: "",
@@ -381,6 +384,7 @@ export default function AdminPage() {
       description: project.description || "",
       longDescription: project.longDescription || "",
       featuresString: project.features?.join("\n") || "",
+      technicalDetailsString: project.technicalDetails?.join("\n") || "",
       stackString: project.stack?.join(", ") || "",
       challengesString: project.challenges?.join("\n") || "",
       futurePlansString: project.futurePlans?.join("\n") || "",
@@ -1097,6 +1101,7 @@ export default function AdminPage() {
                           description: "",
                           longDescription: "",
                           featuresString: "",
+                          technicalDetailsString: "",
                           stackString: "",
                           challengesString: "",
                           futurePlansString: "",
@@ -1171,7 +1176,7 @@ export default function AdminPage() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="space-y-2">
                       <label className="text-xs font-mono text-text-muted">Project Features (one per line)</label>
                       <textarea
@@ -1179,6 +1184,16 @@ export default function AdminPage() {
                         value={projectForm.featuresString}
                         onChange={(e) => setProjectForm({ ...projectForm, featuresString: e.target.value })}
                         placeholder="Role-based access controls&#10;Stripe Checkout payments&#10;Dynamic filters"
+                        className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm leading-relaxed font-mono"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-mono text-text-muted">Technical Highlights (one per line)</label>
+                      <textarea
+                        rows={5}
+                        value={projectForm.technicalDetailsString}
+                        onChange={(e) => setProjectForm({ ...projectForm, technicalDetailsString: e.target.value })}
+                        placeholder="Secured with Better Auth&#10;Stripe webhook validations"
                         className="w-full bg-bg-primary/60 border border-border py-2.5 px-4 rounded-lg focus:outline-none focus:border-accent-cyan transition-colors text-sm leading-relaxed font-mono"
                       />
                     </div>
