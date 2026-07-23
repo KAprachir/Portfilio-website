@@ -19,7 +19,7 @@ export default function About() {
       "My background in Management Information Systems gives me an edge — I think like a developer and a business analyst at the same time, which means the products I build actually make sense for the people using them.",
       "Currently in my final year, open to web development opportunities."
     ],
-    philosophy: "Code is more than just instructions; it is an art form of logic, strategy, and business efficiency. I believe in clean architectures, readable systems, and building products that solve real-world problems.",
+    philosophy: "I believe great software isn't just about clean code — it's about solving the right problem for the right people. I build with purpose: every feature should earn its place, every design decision should serve the user, and every line of code should move the product forward. I care about the why as much as the how.",
     focus: "Currently in my final semester of BBA in Management Information Systems, sharpening my full-stack skills with Next.js, TypeScript, and AI integration. Actively building production-grade projects, seeking a web development internship for October–December 2026, and working toward becoming a Technical Product Manager in the long run.",
     yearsExp: "02+",
     projectsDone: "15+",
