@@ -41,7 +41,8 @@ export default function Hero() {
   const [heroData, setHeroData] = useState({
     title: "Prachir",
     subtitle: "Crafting precise digital experiences through code and product strategy. Bridging the gap between technical complexity and user-centric design.",
-    resumeUrl: "/Khairul_Alam_Prachir_CV_ATS.pdf"
+    resumeUrl: "/Khairul_Alam_Prachir_CV_ATS.pdf",
+    photoUrl: "/profile.png"
   });
 
   const [textIndex, setTextIndex] = useState(0);
@@ -62,7 +63,8 @@ export default function Hero() {
           setHeroData({
             title: data.title || "Prachir",
             subtitle: data.subtitle || "Crafting precise digital experiences through code and product strategy. Bridging the gap between technical complexity and user-centric design.",
-            resumeUrl: data.resumeUrl || "/Khairul_Alam_Prachir_CV_ATS.pdf"
+            resumeUrl: data.resumeUrl || "/Khairul_Alam_Prachir_CV_ATS.pdf",
+            photoUrl: data.photoUrl || "/profile.png"
           });
           if (data.typingTexts && data.typingTexts.length > 0) {
             setTypingTexts(data.typingTexts);

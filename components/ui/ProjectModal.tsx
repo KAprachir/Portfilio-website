@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { X, ExternalLink, CheckSquare, Settings } from "lucide-react";
+import { X, ExternalLink, CheckSquare, Settings, AlertTriangle, Rocket } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -17,6 +17,8 @@ interface Project {
   image: string;
   longDescription?: string;
   technicalDetails?: string[];
+  challenges?: string[];
+  futurePlans?: string[];
 }
 
 interface ProjectModalProps {
@@ -97,7 +99,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               {project.stack.map((tech) => (
                 <span
                   key={tech}
-                  className="text-xs uppercase tracking-wider font-mono px-3 py-1 bg-border/45 text-text-primary rounded border border-white/5"
+                  className="text-xs uppercase tracking-wider font-mono px-3 py-1 bg-border/45 text-text-primary rounded border border-border/50"
                 >
                   {tech}
                 </span>
@@ -133,13 +135,47 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             </div>
           )}
 
+          {/* Challenges Faced */}
+          {project.challenges && project.challenges.length > 0 && (
+            <div className="space-y-3">
+              <h4 className="text-sm font-mono text-amber-400 font-bold uppercase tracking-wider flex items-center gap-2">
+                <AlertTriangle size={16} /> Challenges Faced
+              </h4>
+              <ul className="space-y-2.5 text-sm text-text-muted list-none pl-0">
+                {project.challenges.map((challenge, idx) => (
+                  <li key={idx} className="flex items-start gap-2.5">
+                    <span className="text-amber-400 font-mono text-xs mt-0.5">⚠️</span>
+                    <span>{challenge}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Potential Improvements & Future Plans */}
+          {project.futurePlans && project.futurePlans.length > 0 && (
+            <div className="space-y-3">
+              <h4 className="text-sm font-mono text-emerald-400 font-bold uppercase tracking-wider flex items-center gap-2">
+                <Rocket size={16} /> Potential Improvements & Future Plans
+              </h4>
+              <ul className="space-y-2.5 text-sm text-text-muted list-none pl-0">
+                {project.futurePlans.map((plan, idx) => (
+                  <li key={idx} className="flex items-start gap-2.5">
+                    <span className="text-emerald-400 font-mono text-xs mt-0.5">🚀</span>
+                    <span>{plan}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {/* Action Links */}
           <div className="flex flex-wrap gap-4 pt-6 border-t border-border/40">
             {project.live && (
               <Link
                 href={project.live}
                 target="_blank"
-                className="flex-1 min-w-[140px] px-6 py-3 bg-accent-cyan text-bg-primary font-bold text-sm rounded-lg flex items-center justify-center gap-2 hover:scale-[1.02] transition-all shadow-[0_0_15px_rgba(0,212,255,0.3)]"
+                className="flex-1 min-w-[140px] px-6 py-3 bg-accent-cyan text-bg-primary font-bold text-sm rounded-lg flex items-center justify-center gap-2 hover:scale-[1.02] transition-all shadow-sm"
               >
                 <ExternalLink size={14} />
                 Live Deployment
@@ -149,7 +185,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               <Link
                 href={project.githubClient}
                 target="_blank"
-                className="flex-1 min-w-[140px] px-6 py-3 bg-white/5 text-text-primary hover:text-accent-cyan font-bold text-sm rounded-lg flex items-center justify-center gap-2 hover:bg-white/10 transition-all border border-white/10"
+                className="flex-1 min-w-[140px] px-6 py-3 bg-border/30 text-text-primary hover:text-accent-cyan font-bold text-sm rounded-lg flex items-center justify-center gap-2 hover:bg-border/60 transition-all border border-border"
               >
                 <FaGithub size={16} />
                 GitHub Client
@@ -159,7 +195,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               <Link
                 href={project.githubServer}
                 target="_blank"
-                className="flex-1 min-w-[140px] px-6 py-3 bg-white/5 text-text-primary hover:text-accent-cyan font-bold text-sm rounded-lg flex items-center justify-center gap-2 hover:bg-white/10 transition-all border border-white/10"
+                className="flex-1 min-w-[140px] px-6 py-3 bg-border/30 text-text-primary hover:text-accent-cyan font-bold text-sm rounded-lg flex items-center justify-center gap-2 hover:bg-border/60 transition-all border border-border"
               >
                 <FaGithub size={16} />
                 GitHub Server

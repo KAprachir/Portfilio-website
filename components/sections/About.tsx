@@ -17,7 +17,8 @@ export default function About() {
     aboutBio: [
       "I'm a final-year BBA student majoring in MIS at Begum Rokeya University, Rangpur, Bangladesh.",
       "My journey started with a fascination for how software can solve business problems. Today, I build web applications and think deeply about product strategy.",
-      "I'm passionate about the intersection of business and technology. My goal is to evolve from a developer into a Technical Product Manager."
+      "I'm passionate about the intersection of business and technology. My goal is to evolve from a developer into a Technical Product Manager.",
+      "<strong>Outside of coding:</strong> When I'm not developing apps or analyzing product flows, I enjoy playing sports (cricket & table tennis), reading tech & strategy books, and exploring emerging AI tools."
     ],
     aboutWhoami: "Prachir — MIS Student + Dev",
     aboutLocation: "Rangpur, Bangladesh 🇧🇩",
@@ -38,7 +39,8 @@ export default function About() {
             aboutBio: data.aboutBio && data.aboutBio.length > 0 ? data.aboutBio : [
               "I'm a final-year BBA student majoring in MIS at Begum Rokeya University, Rangpur, Bangladesh.",
               "My journey started with a fascination for how software can solve business problems. Today, I build web applications and think deeply about product strategy.",
-              "I'm passionate about the intersection of business and technology. My goal is to evolve from a developer into a Technical Product Manager."
+              "I'm passionate about the intersection of business and technology. My goal is to evolve from a developer into a Technical Product Manager.",
+              "<strong>Outside of coding:</strong> When I'm not developing apps or analyzing product flows, I enjoy playing sports (cricket & table tennis), reading tech & strategy books, and exploring emerging AI tools."
             ],
             aboutWhoami: data.aboutWhoami || "Prachir — MIS Student + Dev",
             aboutLocation: data.aboutLocation || "Rangpur, Bangladesh 🇧🇩",
@@ -90,8 +92,18 @@ export default function About() {
           </div>
         </div>
 
-        {/* Right Column: Terminal Card */}
-        <div ref={rightColRef} className="lg:col-span-2">
+        {/* Right Column: Profile Photo + Terminal Card */}
+        <div ref={rightColRef} className="lg:col-span-2 space-y-6">
+          <div className="flex justify-center lg:justify-start">
+            <div className="relative w-36 h-36 rounded-2xl overflow-hidden border-2 border-accent-cyan/40 shadow-xl p-1 bg-gradient-to-br from-accent-cyan/20 to-accent-violet/20">
+              <img 
+                src="/profile.png" 
+                alt="Khairul Alam Prachir" 
+                className="w-full h-full object-cover object-top rounded-xl"
+              />
+            </div>
+          </div>
+
           <div className="bg-bg-surface border border-border rounded-xl overflow-hidden shadow-2xl">
             <div className="bg-border/30 px-4 py-2 flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-red-500/50" />

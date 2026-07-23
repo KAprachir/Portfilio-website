@@ -25,6 +25,14 @@ const fallbackProjects = [
       "Robust Admin Panel with user management, recipe moderation, and reports handling",
       "Optimized MongoDB aggregations for dynamic filtering, sorting, and pagination"
     ],
+    challenges: [
+      "Handling Stripe webhook event race conditions during asynchronous subscription state updates.",
+      "Structuring complex MongoDB aggregations for multi-field search, pagination, and real-time like/favorite counts simultaneously."
+    ],
+    futurePlans: [
+      "Implement an AI-powered meal plan generator tailored to user dietary goals.",
+      "Add live video cooking rooms with interactive real-time Q&A."
+    ],
     stack: ["Next.js", "Tailwind CSS", "HeroUI", "Framer Motion", "Node.js", "Express.js", "MongoDB", "Better Auth", "Stripe"],
     githubClient: "https://github.com/KAprachir/recipehub-client",
     githubServer: "https://github.com/KAprachir/recipehub-server",
@@ -46,6 +54,14 @@ const fallbackProjects = [
       "Stripe subscriptions integration for recruiter account upgrades",
       "Smart keyword searches matching candidates based on skill criteria"
     ],
+    challenges: [
+      "Designing a granular multi-role routing guard architecture (Seeker vs Recruiter vs Admin) while keeping client-side navigation fast.",
+      "Managing complex state transitions in the applicant pipeline to prevent illegal status leaps."
+    ],
+    futurePlans: [
+      "Integrate automated AI resume keyword matching & candidate scoring against job requirements.",
+      "Add automated interview scheduling synced with Google Calendar API."
+    ],
     stack: ["Next.js", "Tailwind CSS", "HeroUI", "Motion", "Node.js", "Express.js", "MongoDB", "Better Auth", "Stripe"],
     githubClient: "https://github.com/KAprachir/HireLoop-Client",
     githubServer: "https://github.com/KAprachir/HireLoop-Server",
@@ -66,6 +82,14 @@ const fallbackProjects = [
       "Nested comment systems supporting recursive CRUD operations",
       "Client-side real-time fuzzy search and instant category filter indexing",
       "Persistent state theme manager synced with browser localStorage"
+    ],
+    challenges: [
+      "Designing performant recursive schema queries in MongoDB for multi-level nested comment threads.",
+      "Building a client-side fuzzy search filter without causing re-render lag on large idea lists."
+    ],
+    futurePlans: [
+      "Add real-time WebSockets live chat between startup founders and early-stage investors.",
+      "Build an automated investor pitch deck builder with one-click PDF export."
     ],
     stack: ["Next.js", "Tailwind CSS", "Node.js", "Express.js", "MongoDB", "JWT", "Bcrypt"],
     githubClient: "https://github.com/KAprachir/assignment-9-client",
@@ -165,12 +189,12 @@ export default function Projects() {
                   {/* Tech stack */}
                   <div className="flex flex-wrap gap-1.5 pt-4 border-t border-border/40">
                     {project.stack && project.stack.slice(0, 4).map((tech: string) => (
-                      <span key={tech} className="text-[10px] uppercase tracking-wider font-mono px-2 py-0.5 bg-border/50 text-text-primary rounded border border-white/5">
+                      <span key={tech} className="text-[10px] uppercase tracking-wider font-mono px-2 py-0.5 bg-border/50 text-text-primary rounded border border-border/50">
                         {tech}
                       </span>
                     ))}
                     {project.stack && project.stack.length > 4 && (
-                      <span className="text-[10px] font-mono px-2 py-0.5 text-accent-cyan bg-border/20 rounded border border-white/5">
+                      <span className="text-[10px] font-mono px-2 py-0.5 text-accent-cyan bg-border/20 rounded border border-border/50">
                         +{project.stack.length - 4} more
                       </span>
                     )}
@@ -183,7 +207,7 @@ export default function Projects() {
                         href={project.live} 
                         target="_blank" 
                         onClick={(e) => e.stopPropagation()}
-                        className="flex-1 min-w-[80px] px-2 py-2 bg-accent-cyan text-bg-primary font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-[0_0_12px_rgba(0,212,255,0.2)]"
+                        className="flex-1 min-w-[80px] px-2 py-2 bg-accent-cyan text-bg-primary font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-sm"
                       >
                         <FaExternalLinkAlt size={10} />
                         Live
@@ -194,7 +218,7 @@ export default function Projects() {
                         href={project.githubClient} 
                         target="_blank" 
                         onClick={(e) => e.stopPropagation()}
-                        className="flex-1 min-w-[80px] px-2 py-2 bg-white/5 text-text-primary hover:text-accent-cyan font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:bg-white/10 transition-all border border-white/10"
+                        className="flex-1 min-w-[80px] px-2 py-2 bg-border/30 text-text-primary hover:text-accent-cyan font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:bg-border/60 transition-all border border-border"
                       >
                         <FaGithub size={12} />
                         Client
@@ -205,7 +229,7 @@ export default function Projects() {
                         href={project.githubServer} 
                         target="_blank" 
                         onClick={(e) => e.stopPropagation()}
-                        className="flex-1 min-w-[80px] px-2 py-2 bg-white/5 text-text-primary hover:text-accent-cyan font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:bg-white/10 transition-all border border-white/10"
+                        className="flex-1 min-w-[80px] px-2 py-2 bg-border/30 text-text-primary hover:text-accent-cyan font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 hover:bg-border/60 transition-all border border-border"
                       >
                         <FaGithub size={12} />
                         Server

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Send, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { Mail, Phone, Send, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { FaGithub, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -70,21 +70,40 @@ export default function Contact() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Contact Info */}
-          <div className="space-y-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="flex items-center gap-6 p-6 bg-bg-surface border border-border rounded-xl group hover:border-accent-cyan transition-all"
-            >
-              <div className="p-4 bg-accent-cyan/10 rounded-lg text-accent-cyan group-hover:bg-accent-cyan group-hover:text-bg-primary transition-all">
-                <Mail size={24} />
-              </div>
-              <div>
-                <p className="text-sm text-text-muted font-mono mb-1">Email</p>
-                <p className="text-lg font-medium">kaprachir23@gmail.com</p>
-              </div>
-            </motion.div>
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-4 p-5 bg-bg-surface border border-border rounded-xl group hover:border-accent-cyan transition-all"
+              >
+                <div className="p-3.5 bg-accent-cyan/10 rounded-lg text-accent-cyan group-hover:bg-accent-cyan group-hover:text-bg-primary transition-all shrink-0">
+                  <Mail size={22} />
+                </div>
+                <div className="overflow-hidden">
+                  <p className="text-xs text-text-muted font-mono mb-0.5">Email</p>
+                  <p className="text-sm font-medium truncate">kaprachir23@gmail.com</p>
+                </div>
+              </motion.div>
+
+              <motion.a
+                href="tel:+8801700000000"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.05 }}
+                className="flex items-center gap-4 p-5 bg-bg-surface border border-border rounded-xl group hover:border-accent-cyan transition-all"
+              >
+                <div className="p-3.5 bg-emerald-500/10 rounded-lg text-emerald-400 group-hover:bg-emerald-500 group-hover:text-bg-primary transition-all shrink-0">
+                  <Phone size={22} />
+                </div>
+                <div className="overflow-hidden">
+                  <p className="text-xs text-text-muted font-mono mb-0.5">Phone / WhatsApp</p>
+                  <p className="text-sm font-medium truncate">+880 1784-821652</p>
+                </div>
+              </motion.a>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.a
@@ -94,14 +113,14 @@ export default function Contact() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="flex items-center gap-6 p-6 bg-bg-surface border border-border rounded-xl group hover:border-accent-cyan transition-all"
+                className="flex items-center gap-4 p-5 bg-bg-surface border border-border rounded-xl group hover:border-accent-cyan transition-all"
               >
-                <div className="p-4 bg-accent-violet/10 rounded-lg text-accent-violet group-hover:bg-accent-violet group-hover:text-bg-primary transition-all">
-                  <FaLinkedin size={24} />
+                <div className="p-3.5 bg-accent-violet/10 rounded-lg text-accent-violet group-hover:bg-accent-violet group-hover:text-bg-primary transition-all shrink-0">
+                  <FaLinkedin size={22} />
                 </div>
                 <div>
-                  <p className="text-sm text-text-muted font-mono mb-1">LinkedIn</p>
-                  <p className="text-lg font-medium">Prachir</p>
+                  <p className="text-xs text-text-muted font-mono mb-0.5">LinkedIn</p>
+                  <p className="text-sm font-medium">Prachir</p>
                 </div>
               </motion.a>
 
@@ -112,14 +131,14 @@ export default function Contact() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="flex items-center gap-6 p-6 bg-bg-surface border border-border rounded-xl group hover:border-accent-cyan transition-all"
+                className="flex items-center gap-4 p-5 bg-bg-surface border border-border rounded-xl group hover:border-accent-cyan transition-all"
               >
-                <div className="p-4 bg-white/5 rounded-lg text-text-primary group-hover:bg-text-primary group-hover:text-bg-primary transition-all">
-                  <FaGithub size={24} />
+                <div className="p-3.5 bg-border/30 rounded-lg text-text-primary group-hover:bg-text-primary group-hover:text-bg-primary transition-all shrink-0">
+                  <FaGithub size={22} />
                 </div>
                 <div>
-                  <p className="text-sm text-text-muted font-mono mb-1">GitHub</p>
-                  <p className="text-lg font-medium">KAprachir</p>
+                  <p className="text-xs text-text-muted font-mono mb-0.5">GitHub</p>
+                  <p className="text-sm font-medium">KAprachir</p>
                 </div>
               </motion.a>
             </div>

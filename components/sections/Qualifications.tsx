@@ -172,7 +172,7 @@ export default function Qualifications() {
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <span className="text-xs font-mono text-text-muted bg-[#0d0d14] px-3 py-1.5 border border-border/80 rounded-lg flex items-center gap-1.5 shrink-0">
+                      <span className="text-xs font-mono text-text-muted bg-border/40 px-3 py-1.5 border border-border/80 rounded-lg flex items-center gap-1.5 shrink-0">
                         <Calendar size={12} className="text-accent-cyan" />
                         {item.duration}
                       </span>
@@ -183,7 +183,7 @@ export default function Qualifications() {
                   {/* Tiny Tags in Closed State */}
                   <div className="flex flex-wrap gap-1.5 pt-1">
                     {item.tags.map(tag => (
-                      <span key={tag} className="text-[10px] font-mono px-2 py-0.5 bg-[#0f0f16] border border-border/40 text-text-muted rounded">
+                      <span key={tag} className="text-[10px] font-mono px-2 py-0.5 bg-border/30 border border-border/40 text-text-muted rounded">
                         #{tag}
                       </span>
                     ))}

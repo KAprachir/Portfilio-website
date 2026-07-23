@@ -25,7 +25,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<"dark" | "light">("light");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,20 +50,15 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Initialize theme
+  // Initialize theme (default to light mode, allow user toggle & persistence)
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-      if (savedTheme === "light") {
-        document.documentElement.classList.add("light");
-      }
+    if (savedTheme === "dark") {
+      setTheme("dark");
+      document.documentElement.classList.remove("light");
     } else {
-      const systemPreference = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-      setTheme(systemPreference);
-      if (systemPreference === "light") {
-        document.documentElement.classList.add("light");
-      }
+      setTheme("light");
+      document.documentElement.classList.add("light");
     }
   }, []);
 

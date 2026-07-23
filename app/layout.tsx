@@ -41,10 +41,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="light scroll-smooth">
       <body className={`${jetbrainsMono.variable} ${dmSans.variable} font-sans antialiased bg-bg-primary text-text-primary`}>
         <LenisProvider>
-          <PageLoader />
           <CustomCursor />
           {children}
         </LenisProvider>
