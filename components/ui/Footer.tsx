@@ -10,7 +10,7 @@ export default function Footer() {
         </Link>
         
         <p className="text-text-muted text-sm text-center md:text-right">
-          Designed & Built by Prachir © 2025
+          Designed & Built by Prachir © {new Date().getFullYear()}
         </p>
 
         <div className="flex items-center gap-6 text-text-muted">

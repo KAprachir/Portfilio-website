@@ -57,7 +57,7 @@ export default function BlogListingPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#0a0a0f] text-text-primary pt-32 pb-24 relative overflow-hidden bg-dot-pattern">
+      <main className="min-h-screen bg-bg-primary text-text-primary pt-32 pb-24 relative overflow-hidden bg-dot-pattern">
         {/* Glowing Ambient Orbs */}
         <div className="absolute top-[10%] right-[-10%] w-[50%] aspect-square rounded-full bg-accent-cyan/5 blur-[120px] pointer-events-none" />
         <div className="absolute bottom-[20%] left-[-10%] w-[50%] aspect-square rounded-full bg-accent-violet/5 blur-[120px] pointer-events-none" />
@@ -99,7 +99,7 @@ export default function BlogListingPage() {
                 className={`text-xs font-mono px-3 py-1.5 rounded-lg border transition-all ${
                   selectedTag === null 
                     ? "bg-accent-cyan text-bg-primary border-accent-cyan font-bold" 
-                    : "bg-white/5 border-white/5 hover:border-accent-cyan/30 text-text-muted"
+                    : "bg-border/30 border-border hover:border-accent-cyan/40 text-text-muted"
                 }`}
               >
                 All
@@ -111,7 +111,7 @@ export default function BlogListingPage() {
                   className={`text-xs font-mono px-3 py-1.5 rounded-lg border transition-all ${
                     selectedTag === tag 
                       ? "bg-accent-cyan text-bg-primary border-accent-cyan font-bold" 
-                      : "bg-white/5 border-white/5 hover:border-accent-cyan/30 text-text-muted"
+                      : "bg-border/30 border-border hover:border-accent-cyan/40 text-text-muted"
                   }`}
                 >
                   #{tag}

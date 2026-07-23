@@ -19,28 +19,21 @@ export default function CustomCursor() {
       });
     };
 
+    const onMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest("a, button, input, textarea, select, [role='button'], .interactive")) {
+        gsap.to(cursor, { scale: 1.5, duration: 0.3 });
+      } else {
+        gsap.to(cursor, { scale: 1, duration: 0.3 });
+      }
+    };
+
     window.addEventListener("mousemove", onMouseMove);
-
-    const onMouseEnter = () => {
-      gsap.to(cursor, { scale: 1.5, duration: 0.3 });
-    };
-
-    const onMouseLeave = () => {
-      gsap.to(cursor, { scale: 1, duration: 0.3 });
-    };
-
-    const interactiveElements = document.querySelectorAll("a, button, .interactive");
-    interactiveElements.forEach((el) => {
-      el.addEventListener("mouseenter", onMouseEnter);
-      el.addEventListener("mouseleave", onMouseLeave);
-    });
+    document.addEventListener("mouseover", onMouseOver);
 
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
-      interactiveElements.forEach((el) => {
-        el.removeEventListener("mouseenter", onMouseEnter);
-        el.removeEventListener("mouseleave", onMouseLeave);
-      });
+      document.removeEventListener("mouseover", onMouseOver);
     };
   }, []);
 

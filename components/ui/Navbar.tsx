@@ -89,7 +89,7 @@ export default function Navbar() {
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
         "fixed top-0 left-0 w-full z-50 transition-all duration-300",
-        scrolled ? "py-4 glass border-b border-white/10" : "py-8 bg-transparent"
+        scrolled ? "py-4 glass border-b border-border/60 shadow-md" : "py-8 bg-transparent"
       )}
     >
       <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">

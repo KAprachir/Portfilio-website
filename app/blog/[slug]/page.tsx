@@ -55,8 +55,8 @@ export default function BlogPostReaderPage() {
       // Bold text formatting **text** -> <strong>text</strong>
       let formattedText = para.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
       
-      // Inline code blocks `code` -> <code class="font-mono bg-[#111118] px-1.5 py-0.5 rounded text-accent-cyan">code</code>
-      formattedText = formattedText.replace(/`(.*?)`/g, '<code class="font-mono bg-[#111118] px-1.5 py-0.5 border border-border rounded text-accent-cyan">$1</code>');
+      // Inline code blocks `code` -> <code class="font-mono bg-bg-surface px-1.5 py-0.5 border border-border rounded text-accent-cyan">code</code>
+      formattedText = formattedText.replace(/`(.*?)`/g, '<code class="font-mono bg-bg-surface px-1.5 py-0.5 border border-border rounded text-accent-cyan">$1</code>');
       
       return (
         <p 
@@ -71,7 +71,7 @@ export default function BlogPostReaderPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#0a0a0f] text-text-primary pt-32 pb-24 relative overflow-hidden bg-dot-pattern">
+      <main className="min-h-screen bg-bg-primary text-text-primary pt-32 pb-24 relative overflow-hidden bg-dot-pattern">
         {/* Glowing Ambient Orb */}
         <div className="absolute top-[10%] left-[50%] -translate-x-1/2 w-[60%] aspect-square rounded-full bg-accent-violet/5 blur-[120px] pointer-events-none" />
 
@@ -101,7 +101,7 @@ export default function BlogPostReaderPage() {
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map(tag => (
-                    <span key={tag} className="text-xs font-mono px-3 py-1 bg-border/40 text-text-primary rounded border border-white/5">
+                    <span key={tag} className="text-xs font-mono px-3 py-1 bg-border/30 text-text-primary rounded border border-border">
                       #{tag}
                     </span>
                   ))}

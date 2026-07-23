@@ -46,3 +46,4 @@ next-env.d.ts
 # server backend ignore rules
 /server/node_modules
 /server/.env
+.vercel
