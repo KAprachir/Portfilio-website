@@ -5,6 +5,7 @@ import { X, ExternalLink, CheckSquare, Settings, AlertTriangle, Rocket } from "l
 import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
 import { useEffect } from "react";
+import { useLenis } from "lenis/react";
 
 interface Project {
   title: string;
@@ -27,8 +28,11 @@ interface ProjectModalProps {
 }
 
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
-  // Prevent background scroll when modal is open
+  const lenis = useLenis();
+
+  // Pause background Lenis smooth scroll and prevent body scroll when modal is open
   useEffect(() => {
+    lenis?.stop();
     document.body.style.overflow = "hidden";
     
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -38,16 +42,19 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
     
     return () => {
       document.body.style.overflow = "";
+      lenis?.start();
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [onClose]);
+  }, [lenis, onClose]);
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/80 backdrop-blur-md z-[1000] flex items-center justify-center p-4 overflow-y-auto"
+      data-lenis-prevent
+      data-lenis-prevent-touch
+      className="fixed inset-0 bg-black/80 backdrop-blur-md z-[1000] flex items-center justify-center p-4 md:p-6 overflow-y-auto"
       onClick={onClose}
     >
       <motion.div
@@ -55,7 +62,9 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.9, y: 20, opacity: 0 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="bg-bg-surface border border-border w-full max-w-3xl rounded-2xl overflow-hidden relative shadow-2xl flex flex-col my-8 max-h-[85vh] text-text-primary"
+        data-lenis-prevent
+        data-lenis-prevent-touch
+        className="bg-bg-surface border border-border w-full max-w-3xl rounded-2xl overflow-hidden relative shadow-2xl flex flex-col my-auto max-h-[85vh] text-text-primary"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -77,7 +86,11 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         </div>
 
         {/* Content Body */}
-        <div className="p-6 md:p-8 overflow-y-auto space-y-8 flex-1">
+        <div 
+          className="p-6 md:p-8 overflow-y-auto space-y-8 flex-1"
+          data-lenis-prevent
+          data-lenis-prevent-touch
+        >
           {/* Header */}
           <div>
             <span className="font-mono text-xs text-accent-cyan">// featured project</span>
