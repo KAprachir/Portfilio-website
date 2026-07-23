@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
+import { Code, Lightbulb, Terminal, Target } from "lucide-react";
 import useGsap from "@/hooks/useGsap";
 import gsap from "gsap";
 
@@ -9,21 +10,16 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://server-nu-bice.
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
-  const leftColRef = useRef<HTMLDivElement>(null);
-  const rightColRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const [aboutData, setAboutData] = useState({
-    aboutTitle: "Building the Future",
-    aboutBio: [
-      "I'm a final-year BBA student majoring in MIS at Begum Rokeya University, Rangpur, Bangladesh.",
-      "My journey started with a fascination for how software can solve business problems. Today, I build web applications and think deeply about product strategy.",
-      "I'm passionate about the intersection of business and technology. My goal is to evolve from a developer into a Technical Product Manager.",
-      "<strong>Outside of coding:</strong> When I'm not developing apps or analyzing product flows, I enjoy playing sports (cricket & table tennis), reading tech & strategy books, and exploring emerging AI tools."
-    ],
-    aboutWhoami: "Prachir — MIS Student + Dev",
-    aboutLocation: "Rangpur, Bangladesh 🇧🇩",
-    aboutStatus: "Open to intern/junior dev roles",
-    aboutGoal: "Full Stack Dev → TPM"
+    aboutTitle: "About Me",
+    aboutBio: "I am a full-stack engineer and final-year MIS student with a passion for building high-performance, scalable web applications. My approach combines technical precision with product strategy and user-centric design. I thrive in environments that challenge my problem-solving skills and allow me to push the boundaries of modern digital experiences.",
+    philosophy: "Code is more than just instructions; it is an art form of logic, strategy, and business efficiency. I believe in clean architectures, readable systems, and building products that solve real-world problems.",
+    focus: "Deep diving into Next.js 14 App Router, full-stack MERN architectures, and Technical Product Management. Outside of coding, I enjoy playing sports (cricket & table tennis), reading strategy books, and exploring emerging AI tools.",
+    yearsExp: "02+",
+    projectsDone: "15+",
+    techTools: "10+"
   });
 
   useEffect(() => {
@@ -34,118 +30,124 @@ export default function About() {
       })
       .then(data => {
         if (data) {
-          setAboutData({
-            aboutTitle: data.aboutTitle || "Building the Future",
-            aboutBio: data.aboutBio && data.aboutBio.length > 0 ? data.aboutBio : [
-              "I'm a final-year BBA student majoring in MIS at Begum Rokeya University, Rangpur, Bangladesh.",
-              "My journey started with a fascination for how software can solve business problems. Today, I build web applications and think deeply about product strategy.",
-              "I'm passionate about the intersection of business and technology. My goal is to evolve from a developer into a Technical Product Manager.",
-              "<strong>Outside of coding:</strong> When I'm not developing apps or analyzing product flows, I enjoy playing sports (cricket & table tennis), reading tech & strategy books, and exploring emerging AI tools."
-            ],
-            aboutWhoami: data.aboutWhoami || "Prachir — MIS Student + Dev",
-            aboutLocation: data.aboutLocation || "Rangpur, Bangladesh 🇧🇩",
-            aboutStatus: data.aboutStatus || "Open to intern/junior dev roles",
-            aboutGoal: data.aboutGoal || "Full Stack Dev → TPM"
-          });
+          if (data.aboutBio && Array.isArray(data.aboutBio) && data.aboutBio.length > 0) {
+            const joinedText = data.aboutBio.map((p: string) => p.replace(/<[^>]*>?/gm, '')).join(" ");
+            setAboutData(prev => ({
+              ...prev,
+              aboutBio: joinedText || prev.aboutBio
+            }));
+          }
         }
       })
       .catch(() => {
-        // Fallback already set in state
+        // Safe fallback
       });
   }, []);
 
   useGsap(() => {
-    gsap.from(leftColRef.current, {
+    gsap.from(containerRef.current, {
       scrollTrigger: {
         trigger: sectionRef.current,
         start: "top 80%",
       },
-      x: -100,
+      y: 50,
       opacity: 0,
-      duration: 1,
-      ease: "power3.out",
-    });
-
-    gsap.from(rightColRef.current, {
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top 80%",
-      },
-      x: 100,
-      opacity: 0,
-      duration: 1,
+      duration: 0.8,
       ease: "power3.out",
     });
   }, []);
 
   return (
     <section id="about" ref={sectionRef} className="py-32 bg-bg-primary">
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-5 gap-16 items-center">
-        {/* Left Column: Bio */}
-        <div ref={leftColRef} className="lg:col-span-3">
-          <p className="font-mono text-accent-cyan mb-4">// about me</p>
-          <h2 className="text-4xl md:text-5xl font-bold font-mono mb-8">{aboutData.aboutTitle}</h2>
-          <div className="space-y-6 text-lg text-text-muted">
-            {aboutData.aboutBio.map((paragraph, index) => (
-              <p key={index} dangerouslySetInnerHTML={{ __html: paragraph }} />
-            ))}
-          </div>
-        </div>
-
-        {/* Right Column: Profile Photo + Terminal Card */}
-        <div ref={rightColRef} className="lg:col-span-2 space-y-6">
-          <div className="flex justify-center lg:justify-start">
-            <div className="relative w-36 h-36 rounded-2xl overflow-hidden border-2 border-accent-cyan/40 shadow-xl p-1 bg-gradient-to-br from-accent-cyan/20 to-accent-violet/20">
-              <img 
-                src="/profile.png" 
-                alt="Khairul Alam Prachir" 
-                className="w-full h-full object-cover object-top rounded-xl"
-              />
-            </div>
+      <div ref={containerRef} className="max-w-5xl mx-auto px-6 space-y-8">
+        {/* Main Bento Card: Hero Bio + Photo + Stats */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="bg-bg-surface border border-border rounded-3xl p-8 md:p-12 shadow-2xl space-y-8"
+        >
+          <div className="flex items-center justify-between">
+            <h2 className="text-4xl md:text-5xl font-bold font-mono text-text-primary">{aboutData.aboutTitle}</h2>
+            <span className="font-mono text-xs text-accent-cyan hidden sm:inline-block">// profile & background</span>
           </div>
 
-          <div className="bg-bg-surface border border-border rounded-xl overflow-hidden shadow-2xl">
-            <div className="bg-border/30 px-4 py-2 flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500/50" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
-              <div className="w-3 h-3 rounded-full bg-green-500/50" />
-              <span className="ml-2 text-xs font-mono text-text-muted">bash — profile.sh</span>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-center">
+            {/* User Photo */}
+            <div className="md:col-span-4 flex justify-center md:justify-start">
+              <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-2xl overflow-hidden border border-border/80 bg-bg-primary shadow-xl p-1 group">
+                <img
+                  src="/profile.png"
+                  alt="Khairul Alam Prachir"
+                  className="w-full h-full object-cover object-top rounded-xl group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
             </div>
-            <div className="p-6 font-mono text-sm md:text-base space-y-4">
-              <div className="flex gap-3">
-                <span className="text-accent-cyan">&gt;</span>
+
+            {/* Bio Paragraph */}
+            <div className="md:col-span-8 space-y-4">
+              <p className="text-text-muted text-base md:text-lg leading-relaxed font-sans">
+                {aboutData.aboutBio}
+              </p>
+
+              {/* Stats Counters */}
+              <div className="grid grid-cols-3 gap-6 pt-6 border-t border-border/50">
                 <div>
-                  <p className="text-accent-violet">whoami</p>
-                  <p className="text-text-primary">{aboutData.aboutWhoami}</p>
+                  <p className="text-3xl md:text-4xl font-bold font-mono text-accent-cyan">{aboutData.yearsExp}</p>
+                  <p className="text-xs font-mono text-text-muted mt-1 uppercase tracking-wider">Years Exp.</p>
                 </div>
-              </div>
-              <div className="flex gap-3">
-                <span className="text-accent-cyan">&gt;</span>
                 <div>
-                  <p className="text-accent-violet">location</p>
-                  <p className="text-text-primary">{aboutData.aboutLocation}</p>
+                  <p className="text-3xl md:text-4xl font-bold font-mono text-accent-cyan">{aboutData.projectsDone}</p>
+                  <p className="text-xs font-mono text-text-muted mt-1 uppercase tracking-wider">Projects Done</p>
                 </div>
-              </div>
-              <div className="flex gap-3">
-                <span className="text-accent-cyan">&gt;</span>
                 <div>
-                  <p className="text-accent-violet">status</p>
-                  <p className="text-text-primary">{aboutData.aboutStatus}</p>
+                  <p className="text-3xl md:text-4xl font-bold font-mono text-accent-cyan">{aboutData.techTools}</p>
+                  <p className="text-xs font-mono text-text-muted mt-1 uppercase tracking-wider">Core Tools</p>
                 </div>
-              </div>
-              <div className="flex gap-3">
-                <span className="text-accent-cyan">&gt;</span>
-                <div>
-                  <p className="text-accent-violet">goal</p>
-                  <p className="text-text-primary">{aboutData.aboutGoal}</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <span className="text-accent-cyan animate-pulse">&gt;</span>
-                <span className="w-2 h-5 bg-accent-cyan/50" />
               </div>
             </div>
           </div>
+        </motion.div>
+
+        {/* Bottom Bento Cards: Philosophy & Current Focus */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Card 1: My Philosophy */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="bg-bg-surface border border-border rounded-3xl p-8 shadow-2xl hover:border-accent-cyan/40 transition-colors flex flex-col justify-between"
+          >
+            <div>
+              <div className="w-12 h-12 rounded-xl bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center text-accent-cyan mb-6">
+                <Code size={24} />
+              </div>
+              <h3 className="text-2xl font-bold font-mono text-text-primary mb-4">My Philosophy</h3>
+              <p className="text-text-muted text-base leading-relaxed font-sans">
+                {aboutData.philosophy}
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Card 2: Current Focus */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="bg-bg-surface border border-border rounded-3xl p-8 shadow-2xl hover:border-accent-cyan/40 transition-colors flex flex-col justify-between"
+          >
+            <div>
+              <div className="w-12 h-12 rounded-xl bg-accent-violet/10 border border-accent-violet/20 flex items-center justify-center text-accent-violet mb-6">
+                <Lightbulb size={24} />
+              </div>
+              <h3 className="text-2xl font-bold font-mono text-text-primary mb-4">Current Focus</h3>
+              <p className="text-text-muted text-base leading-relaxed font-sans">
+                {aboutData.focus}
+              </p>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
