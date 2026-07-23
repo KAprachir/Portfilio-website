@@ -18,17 +18,19 @@ const getIconComponent = (iconName: string) => {
 // Static Fallback Data
 const fallbackCategories = [
   {
-    title: "Frontend",
+    title: "Frontend Development",
+    categoryKey: "Frontend",
     skills: [
-      { name: "HTML", iconName: "FaHtml5" },
-      { name: "CSS", iconName: "FaCss3Alt" },
+      { name: "HTML5", iconName: "FaHtml5" },
+      { name: "CSS3", iconName: "FaCss3Alt" },
       { name: "Tailwind CSS", iconName: "SiTailwindcss" },
       { name: "React", iconName: "FaReact" },
       { name: "Next.js", iconName: "SiNextdotjs" },
     ],
   },
   {
-    title: "Backend",
+    title: "Backend & Infrastructure",
+    categoryKey: "Backend",
     skills: [
       { name: "Node.js", iconName: "FaNodeJs" },
       { name: "Express.js", iconName: "SiExpress" },
@@ -37,13 +39,15 @@ const fallbackCategories = [
   },
   {
     title: "Languages",
+    categoryKey: "Languages",
     skills: [
       { name: "JavaScript", iconName: "FaJs" },
       { name: "Python", iconName: "FaPython" },
     ],
   },
   {
-    title: "Tools",
+    title: "Tools & Ecosystem",
+    categoryKey: "Tools",
     skills: [
       { name: "Git", iconName: "FaGitAlt" },
       { name: "GitHub", iconName: "FaGithub" },
@@ -76,15 +80,21 @@ export default function Skills() {
       })
       .then((data: Skill[]) => {
         if (data && data.length > 0) {
-          const categories = ["Frontend", "Backend", "Languages", "Tools"];
-          const grouped = categories.map(catTitle => {
+          const categoryMappings = [
+            { key: "Frontend", displayTitle: "Frontend Development" },
+            { key: "Backend", displayTitle: "Backend & Infrastructure" },
+            { key: "Languages", displayTitle: "Languages" },
+            { key: "Tools", displayTitle: "Tools & Ecosystem" }
+          ];
+
+          const grouped = categoryMappings.map(catMap => {
             const skillsInCat = data
-              .filter(s => s.category.toLowerCase() === catTitle.toLowerCase())
+              .filter(s => s.category.toLowerCase() === catMap.key.toLowerCase())
               .map(s => ({
-                name: s.name,
+                name: s.name === "HTML" ? "HTML5" : s.name === "CSS" ? "CSS3" : s.name,
                 iconComponent: getIconComponent(s.icon)
               }));
-            return { title: catTitle, skills: skillsInCat };
+            return { title: catMap.displayTitle, skills: skillsInCat };
           });
           setSkillCategories(grouped);
         }
@@ -95,40 +105,50 @@ export default function Skills() {
   }, []);
 
   return (
-    <section id="skills" className="py-32 bg-bg-surface/30">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="mb-16">
-          <p className="font-mono text-accent-cyan mb-2">// what I work with</p>
-          <h2 className="text-4xl font-bold font-mono">Tech Stack</h2>
+    <section id="skills" className="py-32 bg-bg-primary">
+      <div className="max-w-6xl mx-auto px-6 space-y-16">
+        {/* Centered Technology Stack Header */}
+        <div className="text-center max-w-3xl mx-auto space-y-4">
+          <h2 className="text-4xl md:text-5xl font-bold font-mono text-text-primary">Technology Stack</h2>
+          <p className="text-text-muted text-base md:text-lg leading-relaxed font-sans">
+            A curated list of tools and technologies I use to bring ideas to life, categorized by their role in the development lifecycle.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        {/* Categories Breakdown */}
+        <div className="space-y-12">
           {skillCategories.map((category, catIndex) => (
-            <div key={category.title}>
-              <h3 className="text-xl font-mono text-text-primary mb-6 border-b border-border pb-2 inline-block">
-                {category.title}
-              </h3>
-              <div className="space-y-4">
+            <div key={category.title} className="space-y-6">
+              {/* Category Subheader */}
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-[1px] bg-accent-cyan" />
+                <h3 className="text-xs font-mono text-accent-cyan uppercase tracking-widest font-semibold">
+                  {category.title}
+                </h3>
+              </div>
+
+              {/* Category Cards Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 {category.skills.map((skill, skillIndex) => {
                   const Icon = skill.iconComponent;
                   return (
                     <motion.div
                       key={skill.name}
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 15 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
-                      transition={{ delay: (catIndex * 0.1) + (skillIndex * 0.05) }}
-                      className="flex items-center justify-between p-3 rounded-lg border border-border hover:border-accent-cyan transition-all group bg-bg-surface"
+                      whileHover={{ y: -5, scale: 1.02 }}
+                      transition={{ duration: 0.2, delay: (catIndex * 0.05) + (skillIndex * 0.03) }}
+                      className="bg-bg-surface border border-border hover:border-accent-cyan/60 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 text-center group shadow-xl transition-all cursor-pointer"
                     >
-                      <div className="flex items-center gap-3">
-                        {Icon ? (
-                          <Icon className="text-text-muted group-hover:text-accent-cyan transition-colors" size={20} />
-                        ) : (
-                          <div className="w-5 h-5 bg-text-muted/20 rounded" />
-                        )}
-                        <span className="text-sm font-medium">{skill.name}</span>
-                      </div>
-                      <div className="w-1.5 h-1.5 rounded-full bg-accent-cyan shadow-[0_0_8px_#00d4ff]" />
+                      {Icon ? (
+                        <Icon className="text-accent-cyan group-hover:scale-110 transition-transform duration-300" size={34} />
+                      ) : (
+                        <div className="w-8 h-8 bg-accent-cyan/20 rounded-lg" />
+                      )}
+                      <span className="text-sm font-semibold font-mono text-text-primary group-hover:text-accent-cyan transition-colors">
+                        {skill.name}
+                      </span>
                     </motion.div>
                   );
                 })}
